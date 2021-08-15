@@ -1,0 +1,19 @@
+FROM python:3.9-slim as builder
+
+WORKDIR /app
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+      build-essential gcc libffi-dev libpq-dev \
+    && apt-get purge -y --auto-remove gcc build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip3 install --prefix=/install -r requirements.txt
+
+FROM python:3.9-slim
+
+COPY --from=builder /install /usr/local
+COPY . .
+
+# CMD ["gunicorn", "-w", "2", "-t", "30", "-b", ":5000", "app:app", "--error-logfile", "-", "--access-logfile", "-"]
+CMD ["gunicorn", "app:app", "-c", "gunicorn.conf.py"]

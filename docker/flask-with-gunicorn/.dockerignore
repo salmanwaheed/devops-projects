@@ -1,0 +1,8 @@
+.DS_Store
+Dockerfile*
+.git
+__pycache__
+*.pyc
+tests/
+docs/
+*.md

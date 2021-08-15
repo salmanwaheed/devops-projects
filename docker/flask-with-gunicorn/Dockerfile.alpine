@@ -1,0 +1,15 @@
+FROM python:3.9-alpine AS builder
+
+WORKDIR /app
+RUN apk add --no-cache gcc musl-dev libffi-dev
+
+COPY requirements.txt .
+RUN pip3 install --prefix=/install -r requirements.txt
+
+FROM python:3.9-alpine
+
+COPY --from=builder /install /usr/local
+COPY . .
+
+# CMD ["gunicorn", "-w", "2", "-t", "30", "-b", ":5000", "app:app", "--error-logfile", "-", "--access-logfile", "-"]
+CMD ["gunicorn", "app:app", "-c", "gunicorn.conf.py"]

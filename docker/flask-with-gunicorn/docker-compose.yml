@@ -1,0 +1,9 @@
+services:
+  flask-app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    image: flask-app
+    container_name: flask-app
+    ports:
+      - 5000:5000
