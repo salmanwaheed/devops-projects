@@ -1,0 +1,24 @@
+volumes:
+  my-mod:
+    name: my-mod
+
+networks:
+  my-net:
+    name: my-net
+    driver: bridge
+
+services:
+  node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node-app
+    container_name: node-app
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src:/app/src
+      - my-mod:/app/node_modules
+    networks:
+      - my-net
