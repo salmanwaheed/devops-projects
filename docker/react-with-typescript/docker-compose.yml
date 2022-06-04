@@ -1,0 +1,27 @@
+volumes:
+  my-mod:
+    name: my-mod
+
+networks:
+  my-net:
+    name: my-net
+    driver: bridge
+
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: react-app
+    container_name: react-app
+    restart: unless-stopped
+    ports:
+      - 3001:3001
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - my-mod:/app/node_modules
+    networks:
+      - my-net
+    environment:
+      PORT: 3001
