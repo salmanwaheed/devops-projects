@@ -1,0 +1,12 @@
+FROM gradle:8.14.2-jdk17 AS builder
+
+WORKDIR /_build
+COPY --chown=gralde:gradle . .
+RUN gradle bootJar --no-daemon
+
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+COPY --from=builder /_build/build/libs/*.jar ./app.jar
+
+CMD ["java", "-jar", "./app.jar"]

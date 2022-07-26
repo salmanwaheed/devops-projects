@@ -1,0 +1,10 @@
+.DS_Store
+.dockerignore
+Dockerfile*
+docker-compose*
+.git
+*.md
+build
+gradle
+gradlew
+gradlew.bat
