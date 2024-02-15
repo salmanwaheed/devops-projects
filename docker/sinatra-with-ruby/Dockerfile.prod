@@ -1,0 +1,26 @@
+FROM ruby:3.2-slim AS builder
+
+WORKDIR /app
+COPY Gemfile* .
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+      build-essential \
+      git \
+    && gem install bundler \
+    && bundle install --without development test \
+    && apt-get remove -y build-essential git \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY . .
+
+FROM ruby:3.2-slim
+
+ENV RACK_ENV=production
+
+COPY --from=builder /usr/local/bundle /usr/local/bundle
+COPY --from=builder /app /app
+
+EXPOSE 4567
+CMD ["puma"]

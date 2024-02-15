@@ -1,0 +1,19 @@
+networks:
+  my-net:
+    name: my-net
+    driver: bridge
+
+services:
+  sinatra-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sinatra-app
+    container_name: sinatra-app
+    restart: unless-stopped
+    ports:
+      - 4567:4567
+    networks:
+      - my-net
+    environment:
+      RACK_ENV: development
