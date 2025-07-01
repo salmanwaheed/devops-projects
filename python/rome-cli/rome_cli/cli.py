@@ -1,9 +1,9 @@
 import sys
 import traceback
 import argparse
-from config import load_config, DEFAULT_CONFIG
-from logger import setup_logging
-from app import run_app
+from rome_cli.config import load_config, DEFAULT_CONFIG
+from rome_cli.logger import setup_logging
+from rome_cli.app import run_app
 
 def main():
   parser = argparse.ArgumentParser(description="Salman Waheed - rome-cli", add_help=False)
