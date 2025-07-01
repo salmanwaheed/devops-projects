@@ -19,12 +19,19 @@ rome-cli                     # uses default /etc/rome-cli/config.yml
 rome-cli --config ./dev.yml  # custom path
 rome-cli -c ./dev.yml        # short flag
 DEBUG=true rome-cli          # shows traceback on failure
-SECRET_KEY=123 rome-cli      # shows traceback on failure
+SECRET_KEY=123 rome-cli      # pass environment variables
 
 ######## development
 python3 -m venv ./venv
 source ./venv/bin/activate
 pip3 install -r requirements.txt
+
+# test 01
 SECRET_KEY=123 python3 -m app
+# test 02
+DEBUG=true python3 -m app
+# test 03
+python3 -m app --config ./dev.yml
+
 deactivate
 ```

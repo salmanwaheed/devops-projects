@@ -2,7 +2,7 @@
 set -e
 
 APP_NAME=rome-cli
-HOME_DIR=$HOME/projects/devops-projects/python/$APP_NAME
+HOME_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_DIR=$HOME_DIR/dist
 
 echo "[*] Installing dependencies..."
@@ -15,7 +15,7 @@ python3 -m venv $HOME_DIR/venv
 source $HOME_DIR/venv/bin/activate
 
 echo "[+] Installing required packages..."
-pip install --quiet -U nuitka -r requirements.txt # pyarmor==7.6.1 setuptools
+pip install --quiet -U nuitka -r $HOME_DIR/requirements.txt # pyarmor==7.6.1 setuptools
 
 echo "[+] Cleaning up previous build..."
 rm -rf $BUILD_DIR && mkdir -p $BUILD_DIR
