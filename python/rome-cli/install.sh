@@ -21,10 +21,10 @@ echo "[+] Cleaning up previous build..."
 rm -rf $BUILD_DIR && mkdir -p $BUILD_DIR
 
 # echo "[+] Obfuscating Python code..."
-# pyarmor obfuscate $HOME_DIR/app.py
+# pyarmor obfuscate $HOME_DIR/main.py
 
 echo "[+] Compiling with Nuitka..."
-nuitka --quiet --follow-imports --onefile --output-dir=$BUILD_DIR --output-filename=$APP_NAME $HOME_DIR/app.py
+nuitka --quiet --follow-imports --onefile --output-dir=$BUILD_DIR --output-filename=$APP_NAME $HOME_DIR/main.py
 
 # echo "[+] Stripping symbols from binary..."
 # strip $BUILD_DIR/$APP_NAME
@@ -32,7 +32,7 @@ nuitka --quiet --follow-imports --onefile --output-dir=$BUILD_DIR --output-filen
 
 echo "[+] Cleaning intermediate folders..."
 deactivate
-rm -rf $BUILD_DIR/app.{build,dist,onefile-build}
+rm -rf $BUILD_DIR/main.{build,dist,onefile-build}
 
 echo "[+] Build complete: $BUILD_DIR/$APP_NAME"
 
