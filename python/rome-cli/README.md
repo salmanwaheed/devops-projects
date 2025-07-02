@@ -1,11 +1,16 @@
 # rome-cli
 
-- structure: main.py → cli.py → app.py → other modules (e.g. gdrive.py, helpers.py, libs.py).
+- Structure: main.py → cli.py → app.py → other modules (e.g. gdrive.py, helpers.py, libs.py).
 - Load configs and secrets from a YAML config file (`/etc/rome-cli/config.yml` by default).
 - Allow custom config path via `--config /path/to/config.yml`.
 - Hides errors unless `--debug` is set.
 - Prevents `.pyc` / `__pycache__` creation.
 - Works great with Nuitka (onefile or native binary).
+- All subcommands live in `rome_cli/commands/`.
+- Each subcommand module like `sub_01.py`, `sub_02.py` has:
+  - defines `register_subparser(subparsers)` and `run(args, config)` functions.
+  - gets access to args and shared config.
+  - discovers and loads them at runtime automatically.
 
 ```sh
 # download repo and go into the directory
@@ -19,6 +24,7 @@ rome-cli --help # get help
 rome-cli --config ./path/config.yml # custom path
 rome-cli --debug # debug
 rome-cli # default /etc/rome-cli/config.yml
+rome-cli --debug [sub-01|sub-02]
 
 ######## development
 python3 -m venv ./venv
