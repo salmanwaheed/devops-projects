@@ -6,15 +6,17 @@ import pkgutil
 from rome_cli.config import load_config, DEFAULT_CONFIG
 from rome_cli.logger import setup_logging
 from rome_cli.formatter import SmartHelpFormatter
+from rome_cli.validator import validate_required_module
+from rome_cli.app import add_args as fallback_add_args, run_app as fallback_run_app
 
 def load_subcommands(subparsers):
   found = False
   import rome_cli.commands
   for loader, module_name, ispkg in pkgutil.iter_modules(rome_cli.commands.__path__):
     module = importlib.import_module(f"rome_cli.commands.{module_name}")
-    if hasattr(module, "register_subparser"):
-      module.register_subparser(subparsers, add_custom_subparser)
-      found = True
+    validate_required_module(module, module_name, ["add_args", "run_app", "register_subparser"])
+    module.register_subparser(subparsers, add_custom_subparser)
+    found = True
   return found
 
 def add_global_arguments(parser):
@@ -45,6 +47,7 @@ def main():
   )
 
   add_global_arguments(parser)
+  fallback_add_args(parser)
   subparsers = parser.add_subparsers(title="subcommands", metavar="", dest="command")
   load_subcommands(subparsers)
 
@@ -65,8 +68,7 @@ def main():
     if hasattr(args, "func"): # attempt to auto-load subcommands from rome_cli.commands
       args.func(args, config)
     else: # fallback to default logic from app.py
-      from rome_cli.app import run_app
-      run_app(args, config)
+      fallback_run_app(args, config)
 
   except Exception as e:
     if args.debug:

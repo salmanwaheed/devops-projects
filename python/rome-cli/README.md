@@ -25,7 +25,7 @@ rome-cli --help # get help
 rome-cli --config ./path/config.yml # custom path
 rome-cli --debug # debug
 rome-cli # default /etc/rome-cli/config.yml
-rome-cli --debug [sub-01|sub-02]
+rome-cli [sub-01|sub-02] --config config.yml --debug
 
 ######## development
 python3 -m venv ./venv
