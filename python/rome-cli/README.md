@@ -6,10 +6,11 @@
 - Hides errors unless `--debug` is set.
 - Prevents `.pyc` / `__pycache__` creation.
 - Works great with Nuitka (onefile or native binary).
-- All subcommands live in `rome_cli/commands/`.
-- Each subcommand module like `sub_01.py`, `sub_02.py` has:
-  - defines `register_subparser(subparsers)` and `run(args, config)` functions.
-  - gets access to args and shared config.
+- If subcommands are found, register and run them as usual.
+- If no subcommands are found (i.e. `rome_cli/commands/` is empty), fallback to a default app, like `app.py`.
+- Each subcommand module like `sub_01.py` or `sub_02.py`:
+  - must have `add_args(parser)`, `run_app(args, config)` and `register_subparser(subparsers, add_sub)` functions.
+  - gets access to `args` and shared `config`.
   - discovers and loads them at runtime automatically.
 
 ```sh

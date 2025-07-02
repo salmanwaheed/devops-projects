@@ -1,12 +1,16 @@
-# import logging
+import logging
 
-# def run_app(args, config):
-#   logging.info("Starting app...")
+def add_args(parser):
+  parser.add_argument("--zoo", metavar="", help="zoo value")
 
-#   for k, v in config.items():
-#     logging.info(f"{k}: {v}")
+def run_app(args, config):
+  print("No subcommands detected. Fallback to default logic from app.py...")
 
-#   print("Application is running...")
-#   logging.debug("Application is running...")
+  logging.info("Starting app...")
+  logging.info(f"ARGS: {args}")
+  logging.info(f"CONFIG: {config}")
 
-#   logging.info("Finished.")
+  logging.info("Finished.")
+
+# def register_subparser(subparsers, add_sub):
+#   add_sub(subparsers, "sub-01", "Run main command", add_args, run_app)
