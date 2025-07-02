@@ -26,7 +26,7 @@ def add_global_arguments(parser):
 def add_custom_subparser(subparsers, name, description, add_args_fn, run_fn):
   parser = subparsers.add_parser(
     name,
-    description=description,
+    help=description,
     add_help=False,
     usage=f"rome-cli {name} [OPTIONS]",
     formatter_class=SmartHelpFormatter
