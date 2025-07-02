@@ -33,7 +33,7 @@ def add_custom_subparser(subparsers, name, description, add_args_fn, run_fn):
   )
   add_args_fn(parser)
   add_global_arguments(parser)
-  parser.set_defaults(func=run_fn)
+  parser.set_defaults(func=run_fn, _subparser=parser)
 
 def main():
   parser = argparse.ArgumentParser(
@@ -48,11 +48,14 @@ def main():
   subparsers = parser.add_subparsers(title="subcommands", metavar="", dest="command")
   load_subcommands(subparsers)
 
-  # if len(sys.argv) == 1:
-  #   parser.print_help()
-  #   sys.exit(0)
-
   args = parser.parse_args()
+
+  if hasattr(args, "_subparser"):
+    args._subparser.print_help()
+    sys.exit(0)
+  else:
+    parser.print_help()
+    sys.exit(0)
 
   try:
     config = load_config(config_path=args.config)
