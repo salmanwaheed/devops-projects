@@ -53,12 +53,12 @@ def main():
 
   args = parser.parse_args()
 
-  if hasattr(args, "_subparser"):
-    args._subparser.print_help()
-    sys.exit(0)
-  else:
+  if len(sys.argv) == 1:
     parser.print_help()
-    sys.exit(0)
+    parser.exit(0)
+  elif hasattr(args, "_subparser") and args.command and len(sys.argv) == 2:
+    args._subparser.print_help()
+    parser.exit(0)
 
   try:
     config = load_config(config_path=args.config)
@@ -75,4 +75,4 @@ def main():
       traceback.print_exc()
     else:
       print(f"[!] Error: {e}")
-    sys.exit(1)
+    parser.exit(1)
