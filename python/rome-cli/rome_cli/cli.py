@@ -74,5 +74,5 @@ def main():
     if args.debug:
       traceback.print_exc()
     else:
-      print(f"[!] Error: {e}")
+      parser.error(e)
     parser.exit(1)
