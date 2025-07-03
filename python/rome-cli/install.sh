@@ -24,7 +24,14 @@ rm -rf $BUILD_DIR && mkdir -p $BUILD_DIR
 # pyarmor obfuscate $HOME_DIR/main.py
 
 echo "[+] Compiling with Nuitka..."
-nuitka --quiet --follow-imports --onefile --output-dir=$BUILD_DIR --output-filename=$APP_NAME $HOME_DIR/main.py
+nuitka \
+  --quiet \
+  --follow-imports \
+  --onefile \
+  --output-dir=$BUILD_DIR \
+  --output-filename=$APP_NAME \
+  --include-package=rome_cli.commands \
+  $HOME_DIR/main.py
 
 # echo "[+] Stripping symbols from binary..."
 # strip $BUILD_DIR/$APP_NAME
