@@ -167,10 +167,10 @@ rome-cli
 rome-cli sub-01 --foo bar
 
 # Debug mode (shows errors, logs)
-rome-cli sub-01 --debug --config ./my-config.yml
+rome-cli sub-01 --debug --config ./config.yml
 
 # Use custom config file
-rome-cli --config ./my-config.yml
+rome-cli --config ./config.yml
 ```
 
 ---
@@ -200,3 +200,4 @@ This ensures subcommands aren't stripped from the final binary.
 - [ ] Add optional plugin system.
 - [ ] Add test suite for CLI.
 - [ ] Publish to PyPI for easier reuse.
+- [ ] A CLI option to generate a sample config file `--init-config`.
