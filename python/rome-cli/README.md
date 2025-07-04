@@ -49,8 +49,8 @@ rome-cli/
 ### Production (Nuitka Binary)
 
 ```bash
-git clone --no-checkout git@github.com:salmanwaheed/devops-projects.git ./rome-cli
-cd ./rome-cli
+git clone --no-checkout git@github.com:salmanwaheed/devops-projects.git ./your-cli
+cd ./your-cli
 git sparse-checkout init --cone
 git sparse-checkout set python/rome-cli
 git checkout
@@ -80,7 +80,7 @@ python3 -m main sub-01 --foo bar --debug
 
 ## Creating New Subcommands
 
-Each file inside `rome_cli/commands/` defines a subcommand. Each module **must define** these three functions:
+Each file inside `your-cli/rome_cli/commands/` defines a subcommand. Each module **must define** these three functions:
 
 ```python
 def add_args(parser): ...
@@ -88,7 +88,7 @@ def run_app(args, config): ...
 def register_subparser(subparsers, add_sub): ...
 ```
 
-### Example: `rome_cli/commands/sub_01.py`
+### Example: `your-cli/rome_cli/commands/sub_01.py`
 
 ```python
 def add_args(parser):
@@ -106,12 +106,16 @@ def register_subparser(subparsers, add_sub):
 
 ## Fallback to `app.py`
 
-If no valid subcommand is detected, the app falls back to `rome_cli/app.py`.
+If no valid subcommand is detected, the app falls back to `your-cli/rome_cli/app.py`.
 This file must define at least:
 
 ```python
-def add_args(parser): ...
-def run_app(args, config): ...
+def add_args(parser):
+  parser.add_argument("--zoo", help="zoo value")
+
+def run_app(args, config):
+  print(f"Running default / fallback command with {args}")
+  # You can access shared YAML config here
 ```
 
 This lets `rome-cli` behave like a single-command CLI when no subcommands exist.
@@ -121,22 +125,6 @@ This lets `rome-cli` behave like a single-command CLI when no subcommands exist.
 ## Reusing `rome-cli` in Another Project (e.g. `your-cli`)
 
 ### Step 1: Package `rome-cli`
-
-Make it a proper Python package:
-
-```python
-# setup.py
-from setuptools import setup, find_packages
-
-setup(
-  name="rome-cli",
-  version="1.0.0",
-  packages=find_packages(),
-  install_requires=[...],
-)
-```
-
-Then install:
 
 ```bash
 pip install -e /path/to/rome-cli
@@ -188,7 +176,7 @@ nuitka \
   --follow-imports \
   --onefile \
   --output-dir=./dist \
-  --output-filename=rome-cli \
+  --output-filename=your-cli \
   --include-package=rome_cli.commands \
   ./main.py
 ```

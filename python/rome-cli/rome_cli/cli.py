@@ -8,7 +8,16 @@ from rome_cli.config import load_config, DEFAULT_CONFIG
 from rome_cli.logger import setup_logging
 from rome_cli.formatter import SmartHelpFormatter
 from rome_cli.validator import validate_required_module
-from rome_cli.app import add_args as fallback_add_args, run_app as fallback_run_app
+
+try:
+  from rome_cli.app import add_args as fallback_add_args
+except ImportError:
+  fallback_add_args = None
+
+try:
+  from rome_cli.app import run_app as fallback_run_app
+except ImportError:
+  fallback_run_app = None
 
 def load_subcommands(subparsers):
   found = False
@@ -49,8 +58,14 @@ def main():
   parser.add_argument("--init-config", action="store_true", help=f"generate sample {DEFAULT_CONFIG} file and exit")
   parser.add_argument("--version", action="version", version=f"%(prog)s v{__version__}", help="show version and exit")
 
+  module = importlib.import_module("rome_cli.app")
+  validate_required_module(module, "app", ["add_args", "run_app"])
+
   add_global_arguments(parser)
-  fallback_add_args(parser)
+
+  if fallback_add_args:
+    fallback_add_args(parser)
+
   subparsers = parser.add_subparsers(title="subcommands", metavar="", dest="command")
   load_subcommands(subparsers)
 
@@ -81,7 +96,7 @@ def main():
 
     if hasattr(args, "func"): # attempt to auto-load subcommands from rome_cli.commands
       args.func(args, config)
-    else: # fallback to default logic from app.py
+    elif fallback_run_app: # fallback to default logic from app.py
       fallback_run_app(args, config)
 
   except Exception as e:

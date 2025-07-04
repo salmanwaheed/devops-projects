@@ -1,0 +1,26 @@
+[project]
+name = "rome-cli"
+version = "1.0.0"
+description = "A modular CLI framework with dynamic subcommands, logging, and config loading"
+
+authors = [
+  { name="Salman Waheed", email="you@example.com" }
+]
+
+dependencies = [
+  "pyyaml>=6.0",
+  "colorama>=0.4.6"
+]
+
+requires-python = ">=3.8"
+
+# [project.scripts]
+# rome = "main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["rome_cli*"]
