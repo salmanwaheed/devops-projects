@@ -1,4 +1,6 @@
 import yaml
+import os
+import subprocess
 from pathlib import Path
 
 DEFAULT_CONFIG = Path("/etc/rome-cli/config.yml")
@@ -19,5 +21,29 @@ def resolve_config_path(path=None):
 
 def load_config(config_path=None):
   path = resolve_config_path(config_path)
+
+  if not path.exists():
+    print(f"Warning: Config file not found at {path}. Using empty config.")
+    return {}
+
   with open(path, "r") as f:
     return yaml.safe_load(f)
+
+def init_config_file(config_path=None):
+    p = resolve_config_path(config_path)
+
+    if p.exists():
+      raise FileExistsError(f"Config file already exists: {p}")
+
+    if not p.parent.exists():
+      # p.parent.mkdir(parents=True, exist_ok=True)
+      subprocess.run(["sudo", "mkdir", "-p", str(p.parent)], check=True)
+      subprocess.run(["sudo", "chown", f"{os.getuid()}:{os.getgid()}", str(p.parent)], check=True)
+
+    sample_config = {
+      "whoami": f"Salman Waheed - loading from {p}",
+      "log_level": "INFO",
+    }
+
+    with open(p, "w") as f:
+      yaml.dump(sample_config, f, default_flow_style=False)

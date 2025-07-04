@@ -23,8 +23,8 @@ def load_subcommands(subparsers):
 def add_global_arguments(parser):
   group = parser.add_argument_group("global options")
   group.add_argument("--help", action="help", help="show this help message and exit")
-  group.add_argument("--debug", action="store_true", help="Enable debug mode")
-  group.add_argument("--config", type=str, default=DEFAULT_CONFIG, metavar="", help=f"Path to config.yml")
+  group.add_argument("--debug", action="store_true", help="enable debug mode")
+  group.add_argument("--config", type=str, default=DEFAULT_CONFIG, metavar="", help=f"optional path to config.yml")
 
 def add_custom_subparser(subparsers, name, description, add_args_fn, run_fn):
   parser = subparsers.add_parser(
@@ -46,6 +46,7 @@ def main():
     usage="rome-cli [OPTIONS] <subcommand> [ARGS]",
     formatter_class=SmartHelpFormatter
   )
+  parser.add_argument("--init-config", action="store_true", help=f"generate sample {DEFAULT_CONFIG} file and exit")
   parser.add_argument("--version", action="version", version=f"%(prog)s v{__version__}", help="show version and exit")
 
   add_global_arguments(parser)
@@ -63,6 +64,12 @@ def main():
     parser.exit(0)
 
   try:
+    if args.init_config:
+      from rome_cli.config import init_config_file
+      init_config_file(config_path=args.config)
+      print(f"Sample config file created at: {args.config}")
+      parser.exit(0)
+
     config = load_config(config_path=args.config)
     log_level = "DEBUG" if args.debug else config.get("log_level", "WARNING")
     setup_logging(level=log_level)

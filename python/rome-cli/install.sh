@@ -45,5 +45,5 @@ echo "[+] Build complete: $BUILD_DIR/$APP_NAME"
 
 echo "[+] Installing /usr/local/bin/$APP_NAME"
 sudo install -m 755 $BUILD_DIR/$APP_NAME /usr/local/bin/$APP_NAME
-sudo mkdir -p /etc/$APP_NAME
-sudo install -m 644 $HOME_DIR/config.yml /etc/$APP_NAME/config.yml
+# sudo mkdir -p /etc/$APP_NAME
+# sudo install -m 644 $HOME_DIR/config.yml /etc/$APP_NAME/config.yml

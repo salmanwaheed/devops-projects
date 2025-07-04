@@ -171,6 +171,9 @@ rome-cli sub-01 --debug --config ./config.yml
 
 # Use custom config file
 rome-cli --config ./config.yml
+
+# generate sample /etc/rome-cli/config.yml file
+rome-cli --init-config
 ```
 
 ---
@@ -199,4 +202,3 @@ This ensures subcommands aren't stripped from the final binary.
 - [ ] Add optional plugin system.
 - [ ] Add test suite for CLI.
 - [ ] Publish to PyPI for easier reuse.
-- [ ] A CLI option to generate a sample config file `--init-config`.
