@@ -49,8 +49,8 @@ rome-cli/
 ### Production (Nuitka Binary)
 
 ```bash
-git clone --no-checkout git@github.com:salmanwaheed/devops-projects.git ./your-cli
-cd ./your-cli
+git clone --no-checkout git@github.com:salmanwaheed/devops-projects.git ./rome-cli
+cd ./rome-cli
 git sparse-checkout init --cone
 git sparse-checkout set python/rome-cli
 git checkout
@@ -80,7 +80,7 @@ python3 -m main sub-01 --foo bar --debug
 
 ## Creating New Subcommands
 
-Each file inside `your-cli/rome_cli/commands/` defines a subcommand. Each module **must define** these three functions:
+Each file inside `rome_cli/commands/` defines a subcommand. Each module **must define** these three functions:
 
 ```python
 def add_args(parser): ...
@@ -88,7 +88,7 @@ def run_app(args, config): ...
 def register_subparser(subparsers, add_sub): ...
 ```
 
-### Example: `your-cli/rome_cli/commands/sub_01.py`
+### Example: `rome_cli/commands/sub_01.py`
 
 ```python
 def add_args(parser):
@@ -106,7 +106,7 @@ def register_subparser(subparsers, add_sub):
 
 ## Fallback to `app.py`
 
-If no valid subcommand is detected, the app falls back to `your-cli/rome_cli/app.py`.
+If no valid subcommand is detected, the app falls back to `rome_cli/app.py`.
 This file must define at least:
 
 ```python
@@ -176,7 +176,7 @@ nuitka \
   --follow-imports \
   --onefile \
   --output-dir=./dist \
-  --output-filename=your-cli \
+  --output-filename=rome-cli \
   --include-package=rome_cli.commands \
   ./main.py
 ```
