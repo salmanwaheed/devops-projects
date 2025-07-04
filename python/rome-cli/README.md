@@ -196,7 +196,6 @@ This ensures subcommands aren't stripped from the final binary.
 
 ## TODO / Suggestions
 
-- [ ] Add `rome_cli/__version__.py` and CLI flag `--version`.
 - [ ] Add optional plugin system.
 - [ ] Add test suite for CLI.
 - [ ] Publish to PyPI for easier reuse.

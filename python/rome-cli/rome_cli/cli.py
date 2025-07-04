@@ -3,6 +3,7 @@ import traceback
 import argparse
 import importlib
 import pkgutil
+from rome_cli import __version__
 from rome_cli.config import load_config, DEFAULT_CONFIG
 from rome_cli.logger import setup_logging
 from rome_cli.formatter import SmartHelpFormatter
@@ -45,6 +46,7 @@ def main():
     usage="rome-cli [OPTIONS] <subcommand> [ARGS]",
     formatter_class=SmartHelpFormatter
   )
+  parser.add_argument("--version", action="version", version=f"%(prog)s v{__version__}", help="show version and exit")
 
   add_global_arguments(parser)
   fallback_add_args(parser)
