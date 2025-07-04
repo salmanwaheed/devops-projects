@@ -1,6 +1,7 @@
 import yaml
 import os
 import subprocess
+import logging
 from pathlib import Path
 
 DEFAULT_CONFIG = Path("/etc/rome-cli/config.yml")
@@ -23,7 +24,7 @@ def load_config(config_path=None):
   path = resolve_config_path(config_path)
 
   if not path.exists():
-    print(f"Warning: Config file not found at {path}. Using empty config.")
+    logging.warning(f"Config file not found at {path}. Using empty config.")
     return {}
 
   with open(path, "r") as f:
@@ -42,7 +43,7 @@ def init_config_file(config_path=None):
 
     sample_config = {
       "whoami": f"Salman Waheed - loading from {p}",
-      "log_level": "INFO",
+      "log_level": "WARNING",
     }
 
     with open(p, "w") as f:
