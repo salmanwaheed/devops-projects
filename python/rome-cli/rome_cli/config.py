@@ -42,8 +42,7 @@ def init_config_file(config_path=None):
       subprocess.run(["sudo", "chown", f"{os.getuid()}:{os.getgid()}", str(p.parent)], check=True)
 
     sample_config = {
-      "whoami": f"Salman Waheed - loading from {p}",
-      "log_level": "WARNING",
+      "whoami": f"Salman Waheed - loading from {p}"
     }
 
     with open(p, "w") as f:

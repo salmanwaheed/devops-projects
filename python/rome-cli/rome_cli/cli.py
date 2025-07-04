@@ -23,8 +23,8 @@ def load_subcommands(subparsers):
 def add_global_arguments(parser):
   group = parser.add_argument_group("global options")
   group.add_argument("--help", action="help", help="show this help message and exit")
-  group.add_argument("--debug", action="store_true", help="enable debug mode")
   group.add_argument("--config", type=str, default=DEFAULT_CONFIG, metavar="", help=f"optional path to config.yml")
+  group.add_argument("-v", action="count", default=0, help=f"verbosity level (-v (INFO), -vv (DEBUG), -vvv (TRACE))")
 
 def add_custom_subparser(subparsers, name, description, add_args_fn, run_fn):
   parser = subparsers.add_parser(
@@ -63,6 +63,12 @@ def main():
     args._subparser.print_help()
     parser.exit(0)
 
+  log_level = {
+    0: "WARNING",
+    1: "INFO",
+    2: "DEBUG"
+  }.get(args.v, "NOTSET")
+
   try:
     if args.init_config:
       from rome_cli.config import init_config_file
@@ -71,7 +77,6 @@ def main():
       parser.exit(0)
 
     config = load_config(config_path=args.config)
-    log_level = "DEBUG" if args.debug else config.get("log_level", "WARNING")
     setup_logging(level=log_level)
 
     if hasattr(args, "func"): # attempt to auto-load subcommands from rome_cli.commands
@@ -80,7 +85,7 @@ def main():
       fallback_run_app(args, config)
 
   except Exception as e:
-    if args.debug:
+    if log_level == "NOTSET":
       traceback.print_exc()
     else:
       parser.error(e)
