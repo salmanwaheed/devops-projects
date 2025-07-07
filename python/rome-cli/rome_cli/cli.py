@@ -40,7 +40,7 @@ def add_custom_subparser(subparsers, name, description, add_args_fn, run_fn):
     name,
     help=description,
     add_help=False,
-    usage=f"rome-cli {name} [OPTIONS]",
+    usage="%(prog)s [OPTIONS]",
     formatter_class=SmartHelpFormatter
   )
   add_args_fn(parser)
@@ -52,7 +52,7 @@ def main():
     prog="rome-cli",
     description="ROME CLI Tool",
     add_help=False,
-    usage="rome-cli [OPTIONS] <subcommand> [ARGS]",
+    usage="%(prog)s [OPTIONS] <subcommand> [ARGS]",
     formatter_class=SmartHelpFormatter
   )
   parser.add_argument("--init-config", action="store_true", help=f"generate sample {DEFAULT_CONFIG} file and exit")
@@ -66,7 +66,7 @@ def main():
   if fallback_add_args:
     fallback_add_args(parser)
 
-  subparsers = parser.add_subparsers(title="subcommands", metavar="", dest="command")
+  subparsers = parser.add_subparsers(prog=parser.prog, title="subcommands", metavar="", dest="command")
   load_subcommands(subparsers)
 
   args = parser.parse_args()
