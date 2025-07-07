@@ -3,7 +3,7 @@ import traceback
 import argparse
 import importlib
 import pkgutil
-from rome_cli import __version__
+from rome_cli.__version__ import __version__
 from rome_cli.config import load_config, DEFAULT_CONFIG
 from rome_cli.logger import setup_logging
 from rome_cli.formatter import SmartHelpFormatter
