@@ -1,0 +1,11 @@
+/**
+ * Theme Name: Sample Theme
+ * Description: A Sample Theme to confirm Theme loading and loopback.
+ * Version: 1.0
+ * Author: Salman Waheed
+ */
+
+body {
+  background: #f2f2f2;
+  font-family: sans-serif;
+}

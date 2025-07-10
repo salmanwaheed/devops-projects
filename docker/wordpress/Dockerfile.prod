@@ -1,0 +1,20 @@
+FROM php:8.2-fpm-alpine
+
+RUN apk add --no-cache nginx curl \
+    && docker-php-ext-install mysqli
+
+WORKDIR /var/www/html
+RUN curl -LO https://wordpress.org/wordpress-6.8.1.tar.gz \
+    && tar -xvzf wordpress-6.8.1.tar.gz --strip-components=1 \
+    && rm -rf wordpress-6.8.1.tar.gz wp-content/plugins/* wp-content/themes/* \
+    && chown -R www-data:www-data .
+
+COPY nginx/default /etc/nginx/http.d/default.conf
+COPY php.ini /usr/local/etc/php/conf.d/custom.ini
+
+COPY --chown=www-data:www-data sample-plugin/ wp-content/plugins/sample-plugin/
+COPY --chown=www-data:www-data sample-theme/ wp-content/themes/sample-theme/
+COPY --chown=www-data:www-data htaccess.txt .htaccess
+
+COPY start.sh /
+CMD ["/start.sh"]

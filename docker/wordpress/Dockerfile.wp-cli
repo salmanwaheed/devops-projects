@@ -1,0 +1,22 @@
+FROM php:8.2-fpm-alpine
+
+RUN apk add --no-cache nginx curl libzip-dev \
+    && docker-php-ext-install zip mysqli
+
+WORKDIR /usr/local/bin
+RUN curl -L -o wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp
+
+COPY nginx/default /etc/nginx/http.d/default.conf
+COPY php.ini /usr/local/etc/php/conf.d/custom.ini
+
+WORKDIR /var/www/html
+RUN wp core download --skip-content --allow-root \
+    && chown -R www-data:www-data .
+
+COPY --chown=www-data:www-data sample-plugin/ wp-content/plugins/sample-plugin/
+COPY --chown=www-data:www-data sample-theme/ wp-content/themes/sample-theme/
+COPY --chown=www-data:www-data htaccess.txt .htaccess
+
+COPY start-wp-cli.sh /
+CMD ["/start-wp-cli.sh"]

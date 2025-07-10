@@ -1,0 +1,21 @@
+server {
+  listen 80;
+  server_name _;
+  index index.php;
+  root /var/www/html;
+
+  location / {
+    try_files $uri $uri/ /index.php$args;
+  }
+
+  location ~ \.php$ {
+    include /etc/nginx/fastcgi.conf;
+    fastcgi_pass 127.0.0.1:9000;
+    fastcgi_index index.php;
+
+    # add these for long-running scripts
+    fastcgi_read_timeout 600s;
+    fastcgi_connect_timeout 60s;
+    fastcgi_send_timeout 600s;
+  }
+}

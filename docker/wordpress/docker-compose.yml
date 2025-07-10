@@ -1,0 +1,32 @@
+networks:
+  my-net:
+    name: wordpress
+    driver: bridge
+
+volumes:
+  my-vol:
+    name: wordpress
+    driver: local
+
+services:
+  wp-app:
+    build: .
+    image: wp-app
+    container_name: wp-app
+    ports:
+      - 8080:80
+    networks:
+      - my-net
+    volumes:
+      - my-vol:/var/www/html
+      - ./sample-plugin:/var/www/html/wp-content/plugins/sample-plugin
+      - ./sample-theme:/var/www/html/wp-content/themes/sample-theme
+      - ./nginx/default:/etc/nginx/http.d/default.conf
+      - ./php.ini:/usr/local/etc/php/conf.d/custom.ini
+    # extra_hosts:
+    #   - host.docker.internal:host-gateway
+    environment:
+      WORDPRESS_DB_HOST: localhost
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp
+      WORDPRESS_DB_NAME: wp
