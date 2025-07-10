@@ -1,0 +1,16 @@
+networks:
+  my-net:
+    name: my-net
+    driver: bridge
+
+services:
+  mydbr-app:
+    build: .
+    image: mydbr-app
+    container_name: mydbr-app
+    ports:
+      - 8080:80
+    volumes:
+      - ./mydbr_config.php:/var/www/mydbr_config.php:ro
+    networks:
+      - my-net
