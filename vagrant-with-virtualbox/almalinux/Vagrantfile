@@ -5,18 +5,21 @@ Vagrant.configure("2") do |config|
   config.vm.box_check_update = false
   config.vm.synced_folder ".", "/vagrant", disabled: true
   config.vm.network "private_network", ip: "192.168.56.18"
-  config.vm.network :forwarded_port, guest: 22, host: 2900, id: "ssh"
+  config.vm.network :forwarded_port, guest: 22, host: 2503, id: "ssh"
+
+  config.ssh.insert_key = false
 
   config.vm.provision "shell" do |s|
-    ssh_pub_key = File.readlines("/home/salman/.ssh/almalinux.pub").first.strip
+    ssh_pub_key_path = File.expand_path("~/.ssh/dev.pub")
+    ssh_pub_key = File.read(ssh_pub_key_path).strip
 
     s.inline = <<-SHELL
       echo "#{ssh_pub_key}" >> /home/vagrant/.ssh/authorized_keys
-      # echo "#{ssh_pub_key}" >> /root/.ssh/authorized_keys
+      echo "#{ssh_pub_key}" >> /root/.ssh/authorized_keys
 
-      sudo sed -i 's|mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/almalinux-*
-      sudo sed -i 's|# baseurl=|baseurl=|g' /etc/yum.repos.d/almalinux-*
-      # sudo sed -i 's|# baseurl=https://repo.almalinux.org|baseurl=https://vault.almalinux.org|g' /etc/yum.repos.d/almalinux-*
+      sudo sed -i "s|mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/almalinux-*
+      sudo sed -i "s|# baseurl=|baseurl=|g" /etc/yum.repos.d/almalinux-*
+      # sudo sed -i "s|# baseurl=https://repo.almalinux.org|baseurl=https://vault.almalinux.org|g" /etc/yum.repos.d/almalinux-*
 
       sudo yum install -y epel-release vim ca-certificates wget zip unzip python3 libmodulemd
     SHELL

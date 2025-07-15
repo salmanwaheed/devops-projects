@@ -7,3 +7,4 @@ ruby
 .bundle
 dist
 *.egg-info
+.vagrant

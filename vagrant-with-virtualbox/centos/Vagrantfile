@@ -1,0 +1,38 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/8"
+  config.vm.hostname = "centos-8"
+  config.vm.box_check_update = false
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.network "private_network", ip: "192.168.56.17"
+  config.vm.network :forwarded_port, guest: 22, host: 2502, id: "ssh"
+
+  config.ssh.insert_key = false
+
+  config.vm.provision "shell" do |s|
+    ssh_pub_key_path = File.expand_path("~/.ssh/dev.pub")
+    ssh_pub_key = File.read(ssh_pub_key_path).strip
+
+    s.inline = <<-SHELL
+      echo "#{ssh_pub_key}" >> /home/vagrant/.ssh/authorized_keys
+
+      sudo mkdir -p /root/.ssh
+      echo "#{ssh_pub_key}" | sudo tee /root/.ssh/authorized_keys >/dev/null 2>&1
+      sudo chmod 600 /root/.ssh/authorized_keys
+
+      sudo rpm --import https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official
+
+      sudo sed -i "s/mirrorlist/#mirrorlist/g" /etc/yum.repos.d/CentOS-*
+      sudo sed -i "s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g" /etc/yum.repos.d/CentOS-*
+
+      # sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+      sudo yum install -y epel-release vim ca-certificates wget zip unzip python3 libmodulemd
+    SHELL
+  end
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    vb.cpus = 2
+    vb.memory = 2048
+    vb.check_guest_additions = false
+  end
+end
