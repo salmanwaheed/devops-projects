@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SnapURL - URL Shortener</title>
+</head>
+<body>
+  <h1>SnapURL</h1>
+  <form method="POST">
+    <input type="url" name="url" placeholder="Enter your URL here" required>
+    <button type="submit">Shorten</button>
+  </form>
+
+  {% if urls %}
+  <h2>Your Short URLs</h2>
+  <ul>
+    {% for url in urls %}
+    <li>
+      Snap URL: <a href="/{{ url[1] }}" target="_blank">{{ request.host_url }}{{ url[1] }}</a><br>
+      Original URL: {{ url[0] }}<br>
+      <a href="{{ url_for('edit', short_code=url[1]) }}">Edit</a> |
+      <a href="{{ url_for('delete', short_code=url[1]) }}" onclick="return confirm('Delete this URL?');">Delete</a>
+      <br><br>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+</body>
+</html>

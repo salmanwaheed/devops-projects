@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SnapURL - Edit</title>
+</head>
+<body>
+  <h1>SnapURL</h1>
+
+  <form method="POST">
+    <label>Short URL: </label> <a href="/{{ short_code }}" target="_blank">{{ request.host_url }}{{ short_code }}</a><br>
+    <label>New Destination URL:</label>
+    <input type="url" name="url" value="{{ original_url }}" required>
+    <button type="submit">Update</button>
+  </form>
+
+  <p><a href="{{ url_for('index') }}">Back to index</a></p>
+</body>
+</html>

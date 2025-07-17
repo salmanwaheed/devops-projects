@@ -1,0 +1,9 @@
+services:
+  snapurl-app:
+    build: .
+    image: snapurl-app
+    container_name: snapurl-app
+    ports:
+      - 5000:5000
+    volumes:
+      - ./:/app

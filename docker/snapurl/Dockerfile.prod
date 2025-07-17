@@ -1,0 +1,18 @@
+FROM python:3.9-alpine AS build
+
+WORKDIR /app
+# RUN apk add --no-cache gcc musl-dev libffi-dev
+
+COPY requirements.txt .
+RUN pip3 install --prefix=/install --no-cache-dir -r requirements.txt
+
+FROM python:3.9-alpine
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /app
+COPY --from=build /install /usr/local
+COPY . .
+
+CMD ["gunicorn", "-c", "gunicorn.conf.py", "app:app"]
