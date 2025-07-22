@@ -30,11 +30,18 @@ cli53 export --full <your-domain.com> > bind-zone.txt
 - Importing these may lead to errors or redundancy.
 
 ```sh
+# Remove SOA and NS records
 grep -vE '\sIN\s(SOA|NS)\s' bind-zone.txt > bind-zone-clean.txt
-sed -i 's|AWS\tALIAS\tA|IN\tCNAME|g' bind-zone-clean.txt
-```
 
-> Remove the extra `HOSTED_ZONE_ID true` fields from `AWS ALIAS A` lines to ensure compatibility with Cloudflare.
+# Replace AWS ALIAS with CNAME (Tab-safe version)
+sed -i 's|AWS[[:space:]]\+ALIAS[[:space:]]\+A|IN\tCNAME|g' bind-zone-clean.txt
+
+# Remove "dualstack." prefix from hostnames
+sed -i 's|dualstack\.||g' bind-zone-clean.txt
+
+# Remove Hosted Zone IDs and trailing "true"
+sed -i -E 's/ Z[A-Z0-9]+ true$//' bind-zone-clean.txt
+```
 
 ---
 
