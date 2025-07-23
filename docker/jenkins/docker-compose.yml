@@ -1,0 +1,22 @@
+networks:
+  my-net:
+    name: my-net
+    driver: bridge
+
+volumes:
+  jenkins-data:
+    name: jenkins-data
+    driver: local
+
+services:
+  jenkins-cicd:
+    build: .
+    image: jenkins-cicd
+    container_name: jenkins-cicd
+    ports:
+      - 8080:8080
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - ./jenkins.yml:/var/jenkins_home/jenkins.yml
+    networks:
+      - my-net

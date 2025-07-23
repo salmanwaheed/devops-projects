@@ -1,0 +1,104 @@
+# https://github.com/jenkinsci/configuration-as-code-plugin/tree/master
+jenkins:
+  disableRememberMe: true
+  numExecutors: 1
+  slaveAgentPort: -1
+  quietPeriod: 5
+  scmCheckoutRetryCount: 0
+  mode: NORMAL
+  markupFormatter: plainText
+  myViewsTabBar: standard
+  viewsTabBar: standard
+
+  labelAtoms:
+    - name: built-in
+
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
+
+  projectNamingStrategy:
+    roleBased:
+      forceExistingJobs: false
+
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      enableCaptcha: false
+      users:
+        - id: salman
+          name: salman
+          description: salman
+          password: 123
+
+  primaryView:
+    list:
+      name: all
+
+  views:
+    - all:
+        name: all
+    - list:
+        name: prod
+        includeRegex: prod-(.+)
+    - list:
+        name: stg
+        includeRegex: stg-(.+)
+
+  nodeMonitors:
+    - diskSpace:
+        freeSpaceThreshold: 1GiB
+        freeSpaceWarningThreshold: 2GiB
+    - tmpSpace:
+        freeSpaceThreshold: 1GiB
+        freeSpaceWarningThreshold: 2GiB
+    - architecture:
+        ignored: true
+    - clock:
+        ignored: true
+    - swapSpace:
+        ignored: true
+    - responseTime:
+        ignored: true
+
+unclassified:
+  location:
+    # url: http://localhost:8080
+    adminAddress: salman@example.com
+
+  timestamper:
+    allPipelines: false
+    elapsedTimeFormat: "'<b>'HH:mm:ss.S'</b> '"
+    systemTimeFormat: "'<b>'HH:mm:ss'</b> '"
+
+tool:
+  git:
+    installations:
+      - name: git
+        home: /usr/bin/git
+
+  jdk:
+    installations:
+      - name: java8
+        home: /opt/java/openjdk/bin/java
+
+appearance:
+  customHeader:
+    enabled: true
+    logoText: Jenkins
+    thinHeader: false
+    header: logo
+    headerColor:
+      backgroundColor: hsl(240, 6%, 13%)
+      color: white
+      hoverColor: rgb(0 0 0 / 5%)
+    logo:
+      symbol:
+        symbol: symbol-jenkins
+  themeManager:
+    disableUserThemes: true
+    theme: darkSystem

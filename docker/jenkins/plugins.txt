@@ -1,0 +1,11 @@
+configuration-as-code:latest
+github:latest
+customizable-header:latest
+dark-theme:latest
+job-dsl:latest
+ssh-slaves:latest
+postbuild-task:latest
+workflow-aggregator:latest
+role-strategy:latest
+ws-cleanup:latest
+timestamper:latest
