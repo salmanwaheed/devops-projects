@@ -49,13 +49,7 @@ rome-cli/
 ### Production (Nuitka Binary)
 
 ```bash
-git clone --no-checkout git@github.com:salmanwaheed/devops-projects.git ./rome-cli
-cd ./rome-cli
-git sparse-checkout init --cone
-git sparse-checkout set python/rome-cli
-git checkout
-# mv ./python/rome-cli/* . && rm -rf python
-
+cd devops-projects/python/rome-cli
 ./install.sh
 
 # run as binary

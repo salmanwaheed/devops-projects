@@ -5,7 +5,7 @@ APP_NAME=rome-cli
 HOME_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_DIR=$HOME_DIR/dist
 
-echo "[*] Installing dependencies..."
+echo "[+] Installing dependencies..."
 # sudo apt update -qq
 sudo apt install -qqy python3-dev build-essential patchelf ccache > /dev/null 2>&1
 # sudo apt autoremove -qqy
@@ -26,8 +26,8 @@ rm -rf $BUILD_DIR && mkdir -p $BUILD_DIR
 echo "[+] Compiling with Nuitka..."
 nuitka \
   --quiet \
-  --follow-imports \
   --onefile \
+  --standalone \
   --output-dir=$BUILD_DIR \
   --output-filename=$APP_NAME \
   --include-package=rome_cli.commands \
@@ -37,13 +37,14 @@ nuitka \
 # strip $BUILD_DIR/$APP_NAME
 # chmod +x $BUILD_DIR/$APP_NAME
 
-echo "[+] Cleaning intermediate folders..."
-deactivate
-rm -rf $BUILD_DIR/main.{build,dist,onefile-build}
-
 echo "[+] Build complete: $BUILD_DIR/$APP_NAME"
+deactivate
 
-echo "[+] Installing /usr/local/bin/$APP_NAME"
+echo "[+] Installing: /usr/local/bin/$APP_NAME"
 sudo install -m 755 $BUILD_DIR/$APP_NAME /usr/local/bin/$APP_NAME
 # sudo mkdir -p /etc/$APP_NAME
 # sudo install -m 644 $HOME_DIR/config.yml /etc/$APP_NAME/config.yml
+
+echo "[+] Cleaning Build: $BUILD_DIR"
+# rm -rf $BUILD_DIR/main.{build,dist,onefile-build}
+rm -rf $BUILD_DIR
