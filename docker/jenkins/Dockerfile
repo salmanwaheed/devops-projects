@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.504.2-jdk17
+FROM jenkins/jenkins:2.516.1-jdk17
 
 USER root
 RUN apt-get update && \
