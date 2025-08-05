@@ -49,10 +49,10 @@ pip install --user --editable . -r requirements.txt
 pip install git+https://github.com/salmanwaheed/venom.git
 ```
 
-### C. Use it in an another project (`my-cli/main.py`)
+### C. Use it in an another project (`mycli/main.py`)
 ```sh
-mkdir my-cli
-cd my-cli
+mkdir mycli
+cd mycli
 touch main.py
 ```
 
@@ -62,7 +62,7 @@ touch main.py
 from venom.cli import VenomCLI
 import logging
 
-cli = VenomCLI(name="you-cli", desc="your cli tool")
+cli = VenomCLI(name="mycli", desc="MyCLI tool")
 cli.verbose()
 cli.version("0.1.0", command=True)
 
@@ -104,7 +104,7 @@ python3 main.py just-print --first-name Salman --last-name Waheed
 # output: Hello Salman Waheed!
 
 python3 main.py version
-# output: your-cli v0.1.0
+# output: mycli v0.1.0
 ```
 
 ---
@@ -128,7 +128,7 @@ nuitka \
   --onefile \
   --include-plugin-directory=/full/path/to/venom/venom \
   --output-dir=./dist \
-  --output-filename=my-cli \
+  --output-filename=mycli \
   main.py
 
 # Once package is compiled, unset environment variable
@@ -137,7 +137,7 @@ nuitka \
 
 ### Run the binary
 ```sh
-./dist/my-cli # on Linux & MacOS
+./dist/mycli # on Linux & MacOS
 ```
 
 ## To remove package
