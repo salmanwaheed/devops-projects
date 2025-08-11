@@ -29,40 +29,20 @@ venom/
 
 ---
 
-## Install and Use Locally
+## Note
+The development, build, and compile instructions are the same across all projects, differing only by project or package name and respective documentation.
 
-### A. Create virtual environment
-```sh
-cd venom
-python3 -m venv .venv
-source .venv/bin/activate
-```
+Please follow the detailed guide here:
+> https://github.com/salmanwaheed/devops-projects/blob/release/python/mypkg-project/README.md
 
-### B. Install the package
-```sh
-# Install from venom folder
-pip install --user --editable . -r requirements.txt
-# Or if system blocks pip:
-# pip install --break-system-packages --user --editable . -r requirements.txt
 
-# Install from GitHub (optional)
-pip install git+https://github.com/salmanwaheed/venom.git
-```
-
-### C. Use it in an another project (`mycli/main.py`)
-```sh
-mkdir mycli
-cd mycli
-touch main.py
-```
-
-#### Add the following code to `main.py`.
+## Documentation
 
 ```python
-from venom.cli import VenomCLI
 import logging
+from venom.cli import VenomCLI
 
-cli = VenomCLI(name="mycli", desc="MyCLI tool")
+cli = VenomCLI(name="my-new-pkg", desc="my-new-pkg tool")
 cli.verbose()
 cli.version("0.1.0", command=True)
 
@@ -95,53 +75,4 @@ def my_file_path():
   print(f"{my_file_path.__name__}: logic is here")
 
 cli.run()
-```
-
-#### Run it:
-```sh
-python3 main.py
-python3 main.py just-print --first-name Salman --last-name Waheed
-# output: Hello Salman Waheed!
-
-python3 main.py version
-# output: mycli v0.1.0
-```
-
----
-
-## Compile with Nuitka (Optional)
-
-### Install Nuitka:
-```sh
-pip install nuitka --user
-# Or if system blocks pip:
-# pip install nuitka --user --break-system-packages
-```
-
-### Compile:
-```sh
-# If installing from venom folder
-# export PYTHONPATH=/full/path/to/venom/venom
-nuitka \
-  --quiet \
-  --standalone \
-  --onefile \
-  --include-plugin-directory=/full/path/to/venom/venom \
-  --output-dir=./dist \
-  --output-filename=mycli \
-  main.py
-
-# Once package is compiled, unset environment variable
-# unset PYTHONPATH
-```
-
-### Run the binary
-```sh
-./dist/mycli # on Linux & MacOS
-```
-
-## To remove package
-```sh
-pip3 uninstall venom --break-system-packages
-rm -rf ./dist
 ```
