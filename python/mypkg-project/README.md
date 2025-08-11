@@ -22,6 +22,7 @@ mypkg-project/
 │   └── core.py
 ├── setup.py
 ├── pyproject.toml
+├── requirements.txt
 └── README.md
 ```
 
@@ -29,79 +30,54 @@ mypkg-project/
 
 ## Install and Use Locally
 
-### A. Create virtual environment
 ```sh
+# Create virtual environment
 cd mypkg-project
 python3 -m venv .venv
 source .venv/bin/activate
+
+# Install package and dependencies
+pip install --editable .
+pip install -r requirements.txt
+
+# Run the script
+python3 main.py
+# Output: Hello, Salman
 ```
 
-### B. Install the package
-```sh
-# Install from mypkg-project folder
-pip install --user --editable .
-# Or if system blocks pip:
-# pip install --break-system-packages --user --editable .
+## Use this library in an another project (`my-new-pkg`)
 
-# Install from GitHub (optional)
-pip install git+https://github.com/salmanwaheed/mypkg.git
-```
-
-### C. Use it in an another project (`my-new-pkg/main.py`)
 ```sh
 mkdir my-new-pkg
 cd my-new-pkg
-touch main.py
-```
 
-#### Add the following code to `main.py`.
+# Create virtual environment
+# Install package and dependencies
 
-```python
+cat <<'EOF' > main.py
 from mypkg.core import hello
 
 print(hello(name="Salman"))
-```
+EOF
 
-#### Run it:
-```sh
+# Run the script
 python main.py
+# Output: Hello, Salman
 ```
 
 ---
 
-## Compile with Nuitka (Optional)
+## Make a Binary file
 
-### Install Nuitka:
 ```sh
-pip install nuitka --user
-# Or if system blocks pip:
-# pip install nuitka --user --break-system-packages
-```
+# Build and compile a binary
+docker build -f Dockerfile.deb -t deb .
 
-### Compile:
-```sh
-# If installing from mypkg-project folder
-# export PYTHONPATH=/full/path/to/mypkg-project/mypkg
-nuitka \
-  --quiet \
-  --standalone \
-  --onefile \
-  --include-plugin-directory=/full/path/to/mypkg-project/mypkg \
-  --output-dir=./dist \
-  --output-filename=my-new-pkg \
-  main.py
+# Copy binary file from Docker image to local machine
+docker create --name tmp deb
+docker cp tmp:/app/dist/mypkg ./mypkg-cli
+docker rm -f tmp
 
-# Once package is compiled, unset environment variable
-# unset PYTHONPATH
-```
-
-### Run the binary
-```sh
-./dist/my-new-pkg # on Linux & MacOS
-```
-
-## To remove package
-```sh
-pip3 uninstall mypkg --break-system-packages
-rm -rf ./dist
+# Run binary on local Debian-based OS
+./mypkg-cli
 ```
