@@ -15,10 +15,10 @@ RUN nuitka \
     --standalone \
     --onefile \
     --output-dir=/app/dist \
-    --output-filename=mypkg \
+    --output-filename=mypkg.bin \
     main.py
 
 # # final stage to just hold the binary
 # FROM ubuntu:bionic
-# COPY --from=builder /app/dist/mypkg /usr/local/bin/mypkg
-# CMD ["mypkg"]
+# COPY --from=builder /app/dist/mypkg.bin /usr/local/bin/mypkg.bin
+# CMD ["mypkg.bin"]

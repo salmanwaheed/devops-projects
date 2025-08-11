@@ -37,32 +37,40 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Install package and dependencies
-pip install --editable .
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 # Run the script
 python3 main.py
-# Output: Hello, Salman
 ```
 
-## Use this library in an another project (`my-new-pkg`)
+## Build before using in different projects
+
+```sh
+./build.sh
+```
+
+## Use this library in another project (`my-new-pkg`)
 
 ```sh
 mkdir my-new-pkg
 cd my-new-pkg
 
 # Create virtual environment
-# Install package and dependencies
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install the wheel package (adjust path as needed)
+pip3 install /path/to/dist/<NAME>-<VERSION>-py3-none-any.whl
+
+# Install dependencies if any
+pip3 install -r requirements.txt
 
 cat <<'EOF' > main.py
-from mypkg.core import hello
-
-print(hello(name="Salman"))
+# read respective documentation
 EOF
 
 # Run the script
 python main.py
-# Output: Hello, Salman
 ```
 
 ---
@@ -71,13 +79,21 @@ python main.py
 
 ```sh
 # Build and compile a binary
-docker build -f Dockerfile.deb -t deb .
+docker build -f Dockerfile.deb -t <NAME> .
 
 # Copy binary file from Docker image to local machine
 docker create --name tmp deb
-docker cp tmp:/app/dist/mypkg ./mypkg-cli
+docker cp tmp:/app/dist/<NAME>.bin .
 docker rm -f tmp
 
 # Run binary on local Debian-based OS
-./mypkg-cli
+./<NAME>.bin
+```
+
+# Documentation
+
+```python
+from mypkg.core import hello
+
+print(hello(name="Salman"))
 ```
