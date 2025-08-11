@@ -1,20 +1,51 @@
-import re
+import os
 import sys
 import traceback
 import argparse
 import logging
+import inspect
+from pathlib import Path
 from venom.logger import VenomLogger
 from venom.formatter import VenomHelpFormatter
-from venom.utils import call_func_with_matching_args
 
 class VenomCLI:
-  def __init__(self, name="venom", desc="VENOM CLI Tool", add_help=False):
+  def __init__(self, name="venom", desc="VENOM CLI Tool", add_help=False, config=None):
     self.name = str(name)
     self.desc = str(desc)
     self.add_help = bool(add_help)
     self.__venom_version = None
     self.__venom_commands = {}
     self.__venom_root_options = {}
+
+    self.config_dir = self.__init_config_dir(config=config)
+
+  def __init_config_dir(self, config: str | None) -> Path:
+    # use "VENOM_CONFIG" or "config" if available, otherwise fallback to "~/.config/venom"
+    custom_env = os.getenv(f"{self.name.upper()}_CONFIG")
+    if custom_env:
+      base_dir = Path(custom_env).expanduser()
+    elif config:
+      base_dir = Path(config).expanduser()
+    else:
+      base_dir = Path.home() / ".config"
+
+    config_dir = base_dir / self.name
+    config_dir.mkdir(parents=True, exist_ok=True) # ensure folder exists
+    return config_dir
+
+  def __call_func_with_matching_args(self, func, args):
+    """
+    Calls `func` with only the arguments it accepts from `args`.
+    """
+    sig = inspect.signature(func)
+
+    # filter only matching args
+    filtered_kwargs = {
+      k: v for k, v in vars(args).items()
+      if k in sig.parameters
+    }
+
+    return func(**filtered_kwargs)
 
   def __venom_should_show_command_help(self, args):
     return (
@@ -29,6 +60,18 @@ class VenomCLI:
       setattr(func, attr_name, [])
     getattr(func, attr_name).append({ "flags": list(flags), "kwargs": dict(kwargs) })
     return func
+
+  def get_config_file(self, filename: str) -> Path:
+    return self.config_dir / filename
+
+  def require_options_if(self, args: dict, flag: str, required: list):
+    if args.get(flag):
+      missing = [opt for opt in required if not args.get(opt)]
+      if missing:
+        raise ValueError(
+            f"When using --{flag.replace('_', '-')}, the following options are required: "
+            + ", ".join(f"--{opt.replace('_', '-')}" for opt in missing)
+        )
 
   def command(self, name=None, help=None):
     def decorator(func):
@@ -133,7 +176,7 @@ class VenomCLI:
     try:
       if hasattr(args, "_handler"):
         # Get only the args from argparse that match the function's parameters
-        call_func_with_matching_args(args._handler, args)
+        self.__call_func_with_matching_args(args._handler, args)
       else:
         print("No command found.")
     except Exception as e:
