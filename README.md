@@ -1,3 +1,3 @@
 # devops-projects
 
-These projects come from my work experience, technical research, and some tasks I completed as part of second-round interviews.
+These projects are based on my work experience, technical research, and exercises completed for interview screenings.
