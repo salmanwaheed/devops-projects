@@ -21,7 +21,8 @@ Vagrant.configure("2") do |config|
       sudo sed -i "s|# baseurl=|baseurl=|g" /etc/yum.repos.d/almalinux-*
       # sudo sed -i "s|# baseurl=https://repo.almalinux.org|baseurl=https://vault.almalinux.org|g" /etc/yum.repos.d/almalinux-*
 
-      sudo yum install -y epel-release vim ca-certificates wget zip unzip python3 libmodulemd
+      sudo yum install -y epel-release vim ca-certificates wget bzip2 zip unzip python3 libmodulemd
+      # sudo yum install -y bind-utils netcat # telnet
     SHELL
   end
 
