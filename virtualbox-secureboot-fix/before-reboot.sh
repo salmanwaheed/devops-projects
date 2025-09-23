@@ -5,23 +5,41 @@ set -e
 # sudo find / -type f \( -name "MOK.der" -o -name "MOK.priv" \)
 # mokutil --list-enrolled | grep -A 1 'VirtualBox'
 
-echo "[+] Installing required packages..."
-sudo apt install -y zstd virtualbox virtualbox-dkms virtualbox-guest-additions-iso linux-headers-generic mokutil >/dev/null 2>&1
+MOK_PATH=/var/lib/shim-signed/mok
 
-echo "[+] Generating MOK key pair..."
-openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -out MOK.pem -nodes -days 36500 -subj "/CN=VirtualBox/" 2>/dev/null
+# --- Detect OS ---
+if [ -f /etc/os-release ]; then
+  . /etc/os-release
+  OS_ID="${ID,,}" # lowercase
+  OS_FAMILY="${ID_LIKE,,}"
+else
+  echo "[ERROR] Cannot detect OS type (missing /etc/os-release)"
+  exit 1
+fi
+echo "[INFO] Detected OS: $PRETTY_NAME"
 
-openssl x509 -outform DER -in MOK.pem -out MOK.der
+echo "[INFO] Installing required packages..."
+if [[ "$OS_ID" =~ ^(debian|ubuntu)$ || "$OS_FAMILY" == *"debian"* ]]; then
+  sudo apt update -qq >/dev/null 2>&1
+  sudo apt install -y zstd virtualbox virtualbox-dkms virtualbox-guest-additions-iso linux-headers-generic mokutil >/dev/null 2>&1
+elif [[ "$OS_ID" =~ ^(rhel|almalinux|centos|fedora)$ || "$OS_FAMILY" == *"rhel"* ]]; then
+  sudo dnf install -y zstd VirtualBox-7.2 kernel-devel kernel-headers mokutil >/dev/null 2>&1
+else
+  echo "[ERROR] Unsupported OS: $OS_ID"
+  exit 1
+fi
 
-echo "[+] Copying MOK keys to system path..."
-sudo mkdir -p /var/lib/shim-signed/mok
-sudo cp MOK.{der,priv} /var/lib/shim-signed/mok/
+echo "[INFO] Creating $MOK_PATH"
+sudo mkdir -p $MOK_PATH
+
+echo "[INFO] Generating MOK key pair..."
+sudo openssl req -nodes -new -x509 -newkey rsa:2048 -outform DER -addext "extendedKeyUsage=codeSigning" -keyout $MOK_PATH/MOK.priv -out $MOK_PATH/MOK.der -subj "/CN=VirtualBox/" >/dev/null 2>&1
 
 echo
 echo "==== This is NOT your system password - it will be used after reboot in the blue MOK screen."
 echo
-echo "[+] Importing MOK key (You'll be prompted for a one-time password)..."
-sudo mokutil --import /var/lib/shim-signed/mok/MOK.der
+echo "[INFO] Importing MOK key (You'll be prompted for a one-time password)..."
+sudo mokutil --import $MOK_PATH/MOK.der
 
-echo "MOK import complete. Please REBOOT and enroll the key in the blue MOK screen."
+echo "[INFO] MOK import complete. Please REBOOT and enroll the key in the blue MOK screen."
 # sudo reboot

@@ -1,10 +1,10 @@
-# VirtualBox Kernel Module Signing & Secure Boot Fix (Ubuntu)
+# VirtualBox Kernel Module Signing & Secure Boot Fix (Debian / RHEL)
 
 This guide helps you enable VirtualBox to work properly with **Secure Boot** by signing its kernel modules using a Machine Owner Key (MOK).
 
 ## Features
 
-- Automatically installs required packages: `virtualbox`, `mokutil`, `zstd`, and kernel headers.
+- Automatically installs required packages: `virtualbox`, `mokutil`, and kernel headers.
 - Automatically generates and imports a Machine Owner Key (MOK) pair (`MOK.der` and `MOK.priv`).
 - Signs VirtualBox DKMS kernel modules (`vboxdrv`, `vboxnetflt`, `vboxnetadp`).
 - Requires a reboot to complete MOK enrollment.
@@ -55,12 +55,10 @@ In that case, **you must run `before-reboot.sh` again**, re-import the key, and 
 After enrollment is complete:
 
 ```sh
-chmod +x after-reboot.sh
-after-reboot.sh
+sudo /sbin/vboxconfig
 ```
 
-This script will:
-- Decompress the `.ko.zst` VirtualBox modules.
+This command will:
 - Sign each module using your enrolled key.
 - Attempt to load modules using `modprobe`.
 - Verify that they are signed.
@@ -79,7 +77,7 @@ This usually means:
 **Fix**:
 - Re-run `before-reboot.sh`.
 - Reboot again and **make sure to complete MOK enrollment**.
-- Then re-run `after-reboot.sh`.
+- Then re-run `sudo /sbin/vboxconfig`.
 
 ---
 
