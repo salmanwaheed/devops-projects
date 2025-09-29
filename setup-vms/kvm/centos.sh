@@ -48,10 +48,9 @@ timezone: Asia/Dubai
 
 bootcmd:
   - systemctl stop sshd.service
-  - [sh, -c, 'echo "\nPS1=\"[\u@\h \W] # \"" | sudo tee -a /etc/skel/.profile']
 
 runcmd:
-  - hostnamectl hostname ip-\$(hostname -I | awk '{print \$1}' | tr '.' '-')
+  - hostnamectl set-hostname ip-\$(hostname -I | awk '{print \$1}' | tr '.' '-')
   - systemctl restart sshd.service
 
 users:
