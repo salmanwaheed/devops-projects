@@ -18,7 +18,7 @@ Each environment includes:
 ## Directory Structure
 
 ```sh
-.
+vagrant-with-virtualbox/
 ├── almalinux/
 │   └── Vagrantfile
 ├── centos/
