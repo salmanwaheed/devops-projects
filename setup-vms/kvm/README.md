@@ -25,6 +25,9 @@ kvm/
 ### 1. Prerequisites
 
 ```bash
+# Check if virtualization is enabled
+egrep -c '(vmx|svm)' /proc/cpuinfo
+
 # install required packages
 sudo dnf install -y @virtualization cloud-utils
 sudo systemctl enable --now libvirtd
@@ -32,6 +35,9 @@ sudo systemctl enable --now libvirtd
 # manage vms without sudo
 sudo usermod -aG kvm,libvirt $USER
 newgrp libvirt
+
+# Check if KVM modules are loaded
+lsmod | grep kvm
 
 # generate an ssh key
 ssh-keygen -t rsa -b 4096 -f ~/.ssh/dev -N ""
