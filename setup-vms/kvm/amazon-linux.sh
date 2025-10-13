@@ -3,7 +3,8 @@
 set -euo pipefail
 
 # Amazon Linux 2023 KVM image:
-# https://cdn.amazonlinux.com/al2023/os-images/2023.8.20250915.0/kvm/al2023-kvm-2023.8.20250915.0-kernel-6.1-x86_64.xfs.gpt.qcow2
+# https://cdn.amazonlinux.com/al2023/os-images/latest/kvm/
+# https://cdn.amazonlinux.com/al2023/os-images/2023.9.20250929.0/kvm/al2023-kvm-2023.9.20250929.0-kernel-6.1-x86_64.xfs.gpt.qcow2
 
 export LIBVIRT_DEFAULT_URI="qemu:///system"
 
