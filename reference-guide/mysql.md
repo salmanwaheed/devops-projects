@@ -41,16 +41,12 @@ These are the most commonly used commands:
 ---
 
 ## Data Definition Language (DDL)
-Used to define or modify the structure of database objects.
+Used to **define, modify, or remove** the structure of database objects (e.g., tables, users, databases).
 
-### Table Creation
-
-```sql
-CREATE TABLE table_name (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100) NOT NULL
-);
-```
+- `CREATE` - Create new objects.
+- `ALTER` - Modify existing objects.
+- `DROP` - Delete objects permanently.
+- `TRUNCATE` - Remove all data from a table (structure remains).
 
 ### Table Constraints
 

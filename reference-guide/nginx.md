@@ -56,13 +56,13 @@ Nginx is a high-performance web server, reverse proxy, and load balancer.
 
 ## Common Modifiers
 
-| Modifier | Meaning                           | Match Type                            | Example                   |      |           |
-| -------- | --------------------------------- | ------------------------------------- | ------------------------- | ---- | --------- |
-| *(none)* | **Prefix match**                  | Matches the **beginning** of URI      | `location /images/ {}`    |      |           |
-| `=`      | **Exact match**                   | Must match the **entire URI exactly** | `location = /about {}`    |      |           |
-| `~`      | **Case-sensitive regex match**    | Uses **regular expressions**          | `location ~ \.php$ {}`    |      |           |
+| Modifier | Meaning                           | Match Type                            | Example                   |
+| -------- | --------------------------------- | ------------------------------------- | ------------------------- |
+| *(none)* | **Prefix match**                  | Matches the **beginning** of URI      | `location /images/ {}`    |
+| `=`      | **Exact match**                   | Must match the **entire URI exactly** | `location = /about {}`    |
+| `~`      | **Case-sensitive regex match**    | Uses **regular expressions**          | `location ~ \.php$ {}`    |
 | `~*`     | **Case-insensitive regex match**  | Regex ignoring case                   | `location ~* \.(jpg\|jpeg\|png)$ {}` |
-| `^~`     | **Prefix match (no regex check)** | Stops searching if matched            | `location ^~ /static/ {}` |      |           |
+| `^~`     | **Prefix match (no regex check)** | Stops searching if matched            | `location ^~ /static/ {}` |
 
 ---
 
