@@ -1,0 +1,15 @@
+Provides information about the current build user.
+
+Example:
+  echo "Built by ${userContext.triggerUser.name} <${userContext.triggerUser.email}>"
+  echo "Admin Email ${userContext.systemUser.name} <${userContext.systemUser.email}>"
+
+  echo "==== User Context loop ===="
+  def ctx = userContext()
+  ctx.each { k, v -> echo "${k}: id=${v.id}, user=${v.name}, email=${v.email}"}
+
+Properties:
+  - userContext()
+  - userContext.triggerUser.{id,name,email}
+  - userContext.commitAuthor.{id,name,email}
+  - userContext.systemUser.{id,name,email}

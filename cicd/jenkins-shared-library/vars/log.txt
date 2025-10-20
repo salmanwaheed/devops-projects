@@ -1,0 +1,11 @@
+Custom logging utility for all Jenkins pipelines.
+
+Example:
+  log.info("Deployment started")
+  log.warn("Something might be wrong")
+  log.err("Build failed")
+
+Methods:
+  - info(msg): Prints an informational message in blue.
+  - warn(msg): Prints a warning in yellow.
+  - err(msg): Prints an error message in red and marks build as failed.

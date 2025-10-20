@@ -1,0 +1,16 @@
+Sends build status notifications via Email and Google Chat.
+
+Examples:
+  notify start: true     // Build started
+  notify success: true   // Build succeeded
+  notify fail: true      // Build failed
+  notify abort: true     // Build aborted
+
+Properties:
+  - start: Sends a notification that the build has started.
+  - success: Sends a notification that the build succeeded.
+  - fail: Sends a notification that the build failed.
+  - abort: Sends a notification that the build was aborted.
+
+Method:
+  - notify(<prop>)

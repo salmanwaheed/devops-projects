@@ -1,0 +1,17 @@
+Restricts deployments during specific time windows unless authorized.
+
+Example:
+  deploymentPolicy()
+
+Env Vars:
+  - AUTHORIZED_DEPLOYERS: '["salman","user2","user3", ...]'
+  - AUTHORIZED_DEPLOYER_TOKEN: Secret key for authorized users
+  - DEPLOY_RESTRICTION_START: Start time (e.g., 1045)
+  - DEPLOY_RESTRICTION_END: End time (e.g., 1200)
+
+Methods:
+  - deploymentPolicy(): Enforces deployment time and user restrictions
+
+Notes:
+  - Applies UAE time (Asia/Dubai)
+  - Authorized users bypass restriction
