@@ -1,0 +1,22 @@
+#cloud-config
+timezone: ${timezone}
+
+bootcmd:
+  - systemctl stop sshd.service
+
+runcmd:
+  - "hostnamectl hostname ip-$(hostname -I | awk '{print $1}' | tr '.' '-')"
+  - systemctl restart sshd.service
+
+users:
+  - name: ${username}
+    sudo: ['ALL=(ALL) NOPASSWD: ALL']
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ${ssh_authorized_key}
+
+ssh_pwauth: false
+chpasswd:
+  list: |
+    ${username}:${password}
+  expire: false
