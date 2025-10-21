@@ -4,7 +4,7 @@ Vault securely manages **secrets, tokens, credentials, and dynamic values** acro
 
 ---
 
-## 🧠 Core Concepts (Recall Fast)
+## Core Concepts (Recall Fast)
 
 | Concept | Meaning |
 |----------|----------|
@@ -21,7 +21,7 @@ Vault securely manages **secrets, tokens, credentials, and dynamic values** acro
 
 ---
 
-## ⚙️ Common Configuration
+## Common Configuration
 
 ### `/etc/vault.d/vault.hcl`
 
@@ -40,7 +40,7 @@ storage "raft" {
   node_id = "<NODE_NAME>"
 
   retry_join {
-    leader_api_addr = "http://<LEADER_IP>:8200"
+    leader_api_addr = "http://<LEADER_VM_IP_ADDRESS>:8200"
   }
 }
 
@@ -50,8 +50,8 @@ seal "awskms" {
 }
 
 ui = true
-api_addr      = "http://<IP_ADDRESS>:8200"
-cluster_addr  = "http://<IP_ADDRESS>:8201"
+api_addr      = "http://<VM_IP_ADDRESS>:8200"
+cluster_addr  = "http://<VM_IP_ADDRESS>:8201"
 cluster_name  = "<CLUSTER_NAME>"
 disable_mlock = true
 ```
@@ -67,13 +67,16 @@ AWS_SECRET_ACCESS_KEY=<secret_key>
 ## Common Commands
 
 ```bash
+vault server -config /etc/vault.d/vault.hcl
+vault status
+
 # Initialize & Unseal
 vault operator init -key-shares=1 -key-threshold=1
 vault operator unseal <key>
 vault operator diagnose -config /etc/vault.d/vault.hcl
 
 # Add new node to cluster
-vault operator raft join http://<LEADER_IP>:8201
+vault operator raft join http://<LEADER_VM_IP_ADDRESS>:8200
 
 # Login
 vault login -method=token <root_token>
@@ -84,16 +87,17 @@ vault token lookup
 vault auth list
 vault auth enable userpass
 vault write auth/userpass/users/<user> password=<pass> policies=<policy>
+vault read auth/userpass/users/<user>
 vault list auth/userpass/users
 vault auth help <method>
 
 # Secrets (KV)
 vault secrets list
-vault secrets enable -path=apps kv
-vault kv put apps/api_keys dev=<value>
-vault kv get apps/api_keys
-vault kv list apps
-vault kv delete apps/api_keys
+vault secrets enable -path=secret kv-v2
+vault kv put secret/api <key>=<value> ...
+vault kv get -field=<key> secret/api
+vault kv list secret
+vault kv delete secret/api
 
 # Policies
 vault policy list
@@ -149,7 +153,7 @@ path "secret/data/*" {
 }
 
 # readonly-policy.hcl
-path "secret/*" {
+path "secret/data/api" {
   capabilities = ["read", "list"]
 }
 ```
@@ -172,10 +176,12 @@ DB_PASSWORD={{ .Data.data.password }}
 ## Useful Environment Variables (~/.bashrc)
 
 ```bash
-export VAULT_ADDR=http://<IP_ADDRESS>:8200
+export VAULT_ADDR=http://<VM_IP_ADDRESS>:8200
 export VAULT_SKIP_VERIFY=true
 export VAULT_TOKEN=<YOUR_TOKEN>
 export VAULT_CACERT=$(mkcert -CAROOT)/rootCA.pem
+export VAULT_LOG_LEVEL=info
+export VAULT_LOG_FILE=/var/log/vault.log
 ```
 
 ## Troubleshooting
