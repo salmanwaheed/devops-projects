@@ -1,0 +1,17 @@
+Sends build status notifications via Email and Google Chat.
+
+Usage:
+  notification.started(true, false)
+  notification.success()
+  notification.failure(false, true)
+  notification.aborted()
+
+Parameters:
+  chat  - (boolean) Send Google Chat notification (default: true)
+  email - (boolean) Send Email notification (default: true)
+
+Methods:
+  started(<params>) - Sends a notification that the build has started.
+  success(<params>) - Sends a notification that the build succeeded.
+  failure(<params>) - Sends a notification that the build failed.
+  aborted(<params>) - Sends a notification that the build was aborted.

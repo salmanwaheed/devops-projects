@@ -14,13 +14,29 @@ private def getUserCause() {
 }
 
 private def getGitCommitInfo(String format) {
-  return sh(script: "git --no-pager show -s --format='${format}' HEAD", returnStdout: true).trim()
+  def script = """#!/bin/bash
+  # set -e
+
+  if [ ! -d .git ]; then
+    echo "no-git-repo"
+    exit 0
+  fi
+
+  # faster (uses log index)
+  git --no-pager log -1 --pretty=format:'${format}'
+
+  # slower (reads full commit object)
+  # git --no-pager show -s --format='${format}' HEAD
+  """
+
+  def result = sh(script: script, returnStdout: true).trim()
+  return result == "no-git-repo" ? null : result
 }
 
 def getTriggerUser() {
-  private def _id = getUserCause()?.userId ?: null
-  private def _name = getUserCause()?.userName ?: null
-  private def _email = _id ? Jenkins.instance.getUser(_id)
+  def _id = getUserCause()?.userId ?: null
+  def _name = getUserCause()?.userName ?: null
+  def _email = _id ? Jenkins.instance.getUser(_id)
                               ?.getProperty(hudson.tasks.Mailer.UserProperty)
                               ?.getAddress() ?: null : null
 
@@ -28,16 +44,19 @@ def getTriggerUser() {
 }
 
 def getCommitAuthor() {
-  private def _name = getGitCommitInfo("%an") ?: null
-  private def _email = getGitCommitInfo("%ae") ?: null
+  def _id = "GITHUB"
+  def _name = getGitCommitInfo("%an") ?: null
+  def _email = getGitCommitInfo("%ae") ?: null
 
-  return new User(id: "GITHUB", name: _name, email: _email)
+  return new User(id: _id, name: _name, email: _email)
 }
 
 def getSystemUser() {
-  private def _email = JenkinsLocationConfiguration.get()?.adminAddress ?: null
+  def _id = "SYSTEM"
+  def _name = "Salman Waheed"
+  def _email = JenkinsLocationConfiguration.get()?.adminAddress ?: null
 
-  return new User(id: "SYSTEM", name: "SYSTEM", email: _email)
+  return new User(id: _id, name: _name, email: _email)
 }
 
 def call() {
