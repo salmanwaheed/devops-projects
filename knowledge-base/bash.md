@@ -38,6 +38,7 @@ echo "$LAST_NAME"             # still "Waheed"
 * Logical: `! && ||`
 * Assignment: `=, +=, -=, *=, /=`
 * File Test: `-e -f -d `
+* Check if a key exists: `-v dict[key]`
 
 ## Reading Input
 
@@ -121,6 +122,9 @@ echo "$name"        # prints "World"
 [ -f file.txt ] && echo "File exists!" || echo "File not found!"
 [ -d dir ] && echo "Directory exists!" || echo "Directory not found!"
 
+name=""
+[ -z "${name}" ] && echo "cannot be empty!" || echo "Hi, ${name}!"
+
 # Create / Delete
 touch file.txt
 rm file.txt
@@ -151,6 +155,11 @@ echo ${str,,}           # lowercase
 echo ${str^^}           # uppercase
 echo ${str^}            # first letter uppercase
 echo ${str,}            # first letter lowercase
+
+# title case
+for w in "${str[@]}"; do
+  echo -n "${w^} "
+done
 ```
 
 ## Arrays
@@ -165,6 +174,23 @@ echo ${arr[0]}            # first element
 arr+=("--HELLO--")        # append/insert
 arr[1]="--SALMAN--"       # update
 unset arr[1]              # remove / unset
+```
+
+## Dictionary
+
+Must use bash v4.0 or above version or use zsh.
+
+```bash
+declare -A dict=( [name]="Salman" [desc]="A Senior DevOps Engineer & Operations Lead" )
+
+echo ${#dict{@}}           # length
+echo ${dict[@]}            # all values
+echo ${!dict[@]}           # all keys
+echo ${dict[name]}         # get
+
+dict[exp]+="11y"           # add/insert
+dict[name]="--SALMAN--"    # update
+unset dict[desc]           # remove / unset
 ```
 
 ## Exit & Error Handling

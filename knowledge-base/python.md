@@ -63,7 +63,7 @@ for i in [1, 2, 4, 5]:
 for i,v in enumerate([1, 2, 4, 5]):
   print(f"{i}={v}", end=" ")
 
-for k,v in {"k1": "v1", "k2": "v2"}:
+for k,v in {"k1": "v1", "k2": "v2"}.items():
   print(f"{k}={v}")
 ```
 
@@ -151,16 +151,14 @@ print(t[0])     # first element
 ### Set
 
 ```py
-s = {10, "salman", True, "waheed"}
-
-print(len(s)) # length
-print(s)      # all elements
-print(s[0])   # first element
-
-s.add("--HELLO--") # append/insert
-s.discard(2)       # remove/unset
-
 s1 = {1, 2, 3}
+
+print(len(s1))  # length
+print(s1)       # all elements
+
+s1.add(10)      # append/insert
+s1.discard(2)   # remove/unset
+
 s2 = {3, 4, 5}
 
 print(s1 | s2) # union
