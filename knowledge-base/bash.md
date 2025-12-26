@@ -156,6 +156,9 @@ echo ${str^^}           # uppercase
 echo ${str^}            # first letter uppercase
 echo ${str,}            # first letter lowercase
 
+echo ${my_var:-"default val"}
+echo ${my_var:?"any msg"}
+
 # title case
 for w in "${str[@]}"; do
   echo -n "${w^} "
@@ -186,9 +189,9 @@ declare -A dict=( [name]="Salman" [desc]="A Senior DevOps Engineer & Operations 
 echo ${#dict{@}}           # length
 echo ${dict[@]}            # all values
 echo ${!dict[@]}           # all keys
-echo ${dict[name]}         # get
+echo ${dict["name"]}       # get
 
-dict[exp]+="11y"           # add/insert
+dict[exp]="11y"            # add/insert
 dict[name]="--SALMAN--"    # update
 unset dict[desc]           # remove / unset
 ```
@@ -200,7 +203,7 @@ exit 0  # success
 exit 1  # error
 
 # Try to create folder (must fail if typo, like: "mkdi" not "mkdir")
-mkdi $HOME/my-test || { echo "Failed to create folder!"; exit 1; }
+mkdi $HOME/my-test 2>>errors.log || { echo "Failed to create folder!"; exit 1; }
 
 echo "Folder created successfully!"
 exit 0
