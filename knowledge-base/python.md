@@ -1,6 +1,6 @@
 # Python Scripting 80/20 Quick Guide
 
-This is everything we need for 80% of the Python Scripting tasks.
+This covers about 80% of what we need for Python automation scripts.
 
 ## To run script
 
@@ -15,7 +15,7 @@ python3 ./script.py
 ## Shebang & Basic Script
 
 ```py
-#!/bin/python3                # shebang line, always at top
+#!/usr/bin/env python3        # shebang line, always at top
 print("Hello World")          # print text
 ```
 
@@ -76,18 +76,142 @@ def greet(name):
 greet(name="Salman") # prints "Hi, Salman!"
 ```
 
-## File I/O
+## Modules and Packages
+
+### File
 
 ```py
-# read, write and append
+# Append / create
 with open("file.txt", "a+") as f:
   f.write("hello world\n")
 
-# read only
+# Read entire file
 with open("file.txt", "r") as f:
   data = f.read()
-
 print(data)
+
+# Read line by line
+with open("file.txt", "r") as f:
+  for line in f:
+    print(line.strip())
+
+```
+
+### os
+
+```py
+import os
+
+os.chdir("/tmp")                      # Change working directory
+os.getcwd()                           # Current directory
+os.listdir(".")                       # List files in current directory
+os.mkdir("new_folder")                # Make new folder
+os.rename("file.txt", "f.txt")        # Rename file
+os.remove("f.txt")                    # Delete file
+
+os.path.join("folder", "file.txt")   # Join paths safely
+os.path.exists("file.txt")           # Check if file/folder exists
+os.path.isdir("folder")              # Is it a directory?
+os.path.isfile("file.txt")           # Is it a file?
+os.environ.get("HOME")               # Get environment variable
+```
+
+### sys
+
+```py
+import sys
+
+sys.version     # Python version
+sys.argv        # cli args
+sys.path        # List of module search paths
+sys.exit(1)     # Exit with error code 1
+
+# Example: python script.py arg1 arg2
+```
+
+### subprocess
+
+```py
+import subprocess
+
+# Run a command
+subprocess.run(["echo", "Hello World"])
+
+# Capture output
+result = subprocess.run(["ls", "-l"], capture_output=True, text=True)
+print(result.stdout)
+
+# Check for errors
+result = subprocess.run(["ls", "non-existent"], capture_output=True, text=True)
+print(result.returncode) # 0 if success, >0 if error
+```
+
+### YAML / JSON
+
+```py
+# needs PyYAML installed
+import yaml, json
+
+data = {"name": "Salman"}
+
+# YAML
+yaml_str = yaml.dump(data)                      # Convert dict → YAML string
+print(yaml_str)
+print(yaml.safe_load(yaml_str))                 # Convert YAML string → dict
+
+yaml.dump(data, open("data.yml", "w"))          # Write dict → YAML file
+print(yaml.safe_load(open("data.yml", "r")))    # Read YAML file → dict
+
+# JSON
+json_str = json.dumps(data)                     # Convert dict → JSON string
+print(json_str)
+print(json.loads(json_str))                     # Convert JSON string → dict
+
+json.dump(data, open("data.json", "w"))         # Write dict → JSON file
+print(json.load(open("data.json", "r")))        # Read JSON file → dict
+```
+
+### requests
+
+```py
+# pip install requests
+import requests
+
+api_key = "YOUR_API_KEY"
+headers = {"x-api-key": api_key} # {"Authorization": f"Bearer {api_key}"}
+
+r = requests.get("https://api.example.com/data", headers=headers)
+print(r.status_code, r.json())
+```
+
+### logging
+
+```py
+import logging
+
+# Save logs to a file
+logging.basicConfig(
+  filename="my-app.log",                              # log file name
+  filemode="a",                                       # append mode ('w' to overwrite)
+  level=logging.INFO,                                 # minimum log level
+  format="%(asctime)s - %(levelname)s - %(message)s"  # log format
+)
+
+logging.info("Starting script...")
+logging.warning("This is a warning")
+logging.error("This is an error")
+```
+
+## Error Handling
+
+```py
+try:
+  name = "Salman"
+  print(nam)
+except Exception as e:
+  print("[ERROR]:", e)
+finally:
+  print("Always run...")
 ```
 
 ## Data Structure
@@ -95,16 +219,16 @@ print(data)
 ### Strings
 
 ```py
-str="HellO World, HellO World, world world"
+s="HellO World, HellO World, world world"
 
-print(len(str)) # length
-print(str[1:3]) # substring
+print(len(s)) # length
+print(s[1:3]) # substring
 
-print(str.replace("HellO", "hi")) # replace all matches
+print(s.replace("HellO", "hi")) # replace all matches
 
-print(str.lower()) # lowercase
-print(str.upper()) # uppercase
-print(str.title()) # titlecase
+print(s.lower()) # lowercase
+print(s.upper()) # uppercase
+print(s.title()) # titlecase
 ```
 
 ### List - unordered - mutable
@@ -172,16 +296,4 @@ print(s1 ^ s2) # symmetric difference
 l = [x*2 for x in range(5)]     # list
 s = {x for x in range(5)}       # set
 d = {x:x*2 for x in range(5)}   # dict
-```
-
-## Error Handling
-
-```py
-try:
-  name = "Salman"
-  print(nam)
-except Exception as e:
-  print("[ERROR]:", e)
-finally:
-  print("Always run...")
 ```

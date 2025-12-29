@@ -1,6 +1,6 @@
 # Bash Scripting 80/20 Quick Guide
 
-This is everything we need for 80% of the Bash Scripting tasks.
+This covers about 80% of what we need for Bash automation scripts.
 
 ## To run script
 
