@@ -92,14 +92,14 @@ print(data)
 
 # Read line by line
 with open("file.txt", "r") as f:
-  for line in f:
-    print(line.strip())
-
+  lines = [line.strip() for line in f.readlines()]
+print(lines)
 ```
 
 ### os
 
 ```py
+# https://docs.python.org/3/library/os.html
 import os
 
 os.chdir("/tmp")                      # Change working directory
@@ -119,6 +119,7 @@ os.environ.get("HOME")               # Get environment variable
 ### sys
 
 ```py
+# https://docs.python.org/3/library/sys.html
 import sys
 
 sys.version     # Python version
@@ -132,6 +133,7 @@ sys.exit(1)     # Exit with error code 1
 ### subprocess
 
 ```py
+# https://docs.python.org/3/library/subprocess.html
 import subprocess
 
 # Run a command
@@ -146,9 +148,10 @@ result = subprocess.run(["ls", "non-existent"], capture_output=True, text=True)
 print(result.returncode) # 0 if success, >0 if error
 ```
 
-### YAML / JSON
+### YAML / JSON / jmespath
 
 ```py
+# https://pyyaml.org/wiki/PyYAMLDocumentation
 # needs PyYAML installed
 import yaml, json
 
@@ -163,17 +166,38 @@ yaml.dump(data, open("data.yml", "w"))          # Write dict → YAML file
 print(yaml.safe_load(open("data.yml", "r")))    # Read YAML file → dict
 
 # JSON
+# https://docs.python.org/3/library/json.html
 json_str = json.dumps(data)                     # Convert dict → JSON string
 print(json_str)
 print(json.loads(json_str))                     # Convert JSON string → dict
 
 json.dump(data, open("data.json", "w"))         # Write dict → JSON file
 print(json.load(open("data.json", "r")))        # Read JSON file → dict
+
+# JEMS PATH / like SQL for JSON
+# - rows        → []
+# - WHERE       → ?condition
+# - SELECT      → {}
+# - pipeline    → |
+#
+# Example: → aws ec2 describe-instances --query "Reservations[].Instances[?State.Name=='running'].InstanceId"
+
+data = {
+  "users": [
+    {"name": "Salman", "role": "admin"},
+    {"name": "Sara", "role": "user"},
+  ]
+}
+
+# https://jmespath.org
+jmespath.search("users[?role=='admin'].name", data)
+# Output: ["Salman"]
 ```
 
 ### requests
 
 ```py
+# https://requests.readthedocs.io/en/latest
 # pip install requests
 import requests
 
@@ -187,6 +211,7 @@ print(r.status_code, r.json())
 ### logging
 
 ```py
+# https://docs.python.org/3/library/logging.html
 import logging
 
 # Save logs to a file

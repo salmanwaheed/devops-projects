@@ -25,6 +25,7 @@ name="Salman"
 echo "$name"                  # access variable
 readonly LAST_NAME="Waheed"   # constant, immutable: "assign-new-value=no", "unset-variable=no", "in-place-update=yes"
 unset name                    # remove variable
+echo "NAME: ${name}"          # returns only NAME:
 
 LAST_NAME="hello"             # error
 echo "${LAST_NAME/Wa/w}"      # prints "wheed"
@@ -80,7 +81,7 @@ for i in {1..5}; do
 done
 
 # For loop with regex
-for file in *.txt; do
+for file in $(ls -1 *.txt | grep -v file.txt); do
   echo $file
 done
 
@@ -176,7 +177,7 @@ echo ${arr[0]}            # first element
 
 arr+=("--HELLO--")        # append/insert
 arr[1]="--SALMAN--"       # update
-unset arr[1]              # remove / unset
+unset arr[0]              # remove / unset
 ```
 
 ## Dictionary
@@ -184,16 +185,16 @@ unset arr[1]              # remove / unset
 Must use bash v4.0 or above version or use zsh.
 
 ```bash
-declare -A dict=( [name]="Salman" [desc]="A Senior DevOps Engineer & Operations Lead" )
+declare -A d=( [k1]=10 [k2]="salman" [k3]=true [k4]="waheed" )
 
 echo ${#dict{@}}           # length
 echo ${dict[@]}            # all values
 echo ${!dict[@]}           # all keys
-echo ${dict["name"]}       # get
+echo ${dict["k2"]}         # get
 
-dict[exp]="11y"            # add/insert
-dict[name]="--SALMAN--"    # update
-unset dict[desc]           # remove / unset
+dict[k5]="--HELLO--"       # add/insert
+dict[k2]="--SALMAN--"      # update
+unset dict[k1]             # remove / unset
 ```
 
 ## Exit & Error Handling
