@@ -227,6 +227,16 @@ logging.warning("This is a warning")
 logging.error("This is an error")
 ```
 
+### datetime
+
+```py
+# https://docs.python.org/3/library/datetime.html
+from datetime import datetime, timezone
+
+now         = datetime.now(timezone.utc)
+today_at_11 = datetime(2026, 1, 5, 11, 0, 0, 0, timezone.utc)
+```
+
 ## Error Handling
 
 ```py
