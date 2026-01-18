@@ -14,8 +14,15 @@ chmod +x ./script.sh
 ```bash
 #!/bin/bash           # shebang line, always at top
 echo "Hello World"    # print text
-echo {1..7}           # brace expansion, print 1 to 7 numbers: 1 2 3 4 ...
-echo {a..h}           # brace expansion, print a to h letters: a b c d ...
+```
+
+## Brace Expansion
+
+```bash
+echo {1..7}     # 1 2 3 ... 7
+echo {a..h}     # a b c ... h
+echo {5..50..5}  # 5 10 15 ... 50
+echo {x,y}.txt   # x.txt y.txt
 ```
 
 ## Variables
