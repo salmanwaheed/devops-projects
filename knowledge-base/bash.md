@@ -42,6 +42,7 @@ echo "$LAST_NAME"             # still "Waheed"
 ## Operators
 
 * Arithmetic: `+ - * / % **`
+* Regex: `=~`
 * Comparison: `== != > < >= <=` or `-eq  -ne  -gt  -ge  -lt  -le`
 * Logical: `! && ||`
 * Assignment: `=, +=, -=, *=, /=`
@@ -57,11 +58,14 @@ echo "Hello $user"
 
 ## Conditionals
 
+* Use `[ ... ]` if you want portable (POSIX) shell scripts.
+* Use `[[ ... ]]` if you are writing Bash scripts and want `regex`, `OR/AND`, or `safer comparisons`.
+
 ```bash
 user="Salman"
-if [ "$user" == "Salman" ]; then
+if [[ "$user" =~ ^(Salman|Sara)$ ]]; then
   echo "Welcome!"
-elif [ "$user" == "Guest" ]; then
+elif [[ "$user" == "Guest" || "$user" == "Visitor" ]]; then
   echo "Hello Guest"
 else
   echo "Who are you?"

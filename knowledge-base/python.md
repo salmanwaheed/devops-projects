@@ -109,11 +109,13 @@ os.mkdir("new_folder")                # Make new folder
 os.rename("file.txt", "f.txt")        # Rename file
 os.remove("f.txt")                    # Delete file
 
-os.path.join("folder", "file.txt")   # Join paths safely
-os.path.exists("file.txt")           # Check if file/folder exists
-os.path.isdir("folder")              # Is it a directory?
-os.path.isfile("file.txt")           # Is it a file?
-os.environ.get("HOME")               # Get environment variable
+os.path.join("folder", "file.txt")    # Join paths safely
+os.path.exists("file.txt")            # Check if file/folder exists
+os.path.isdir("folder")               # Is it a directory?
+os.path.isfile("file.txt")            # Is it a file?
+os.path.basename("/path/to/file.txt") # Returns file.txt
+os.path.dirname("/path/to/file.txt")  # Returns /path/to
+os.environ.get("HOME")                # Get environment variable
 ```
 
 ### sys

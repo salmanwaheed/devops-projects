@@ -78,6 +78,16 @@ server {
   location / {
     try_files $uri $uri/ =404;
   }
+
+  location /api {
+    add_header Content-Type 'application/json';
+    return 403 '{"error": "Access forbidden"}';
+  }
+
+  location = /ads.txt {
+    alias /usr/share/nginx/html/ads.txt;
+    default_type text/plain;
+  }
 }
 ```
 
@@ -118,6 +128,11 @@ server {
 Make your localhost secure `../localhost-http-to-https`.
 
 ```nginx
+# IF ERROR = bind() to 0.0.0.0:80 failed or any port
+# sudo systemctl stop nginx
+# sudo nginx -s stop
+# pkill nginx
+
 server {
   listen 80;
   server_name example.com;
@@ -127,13 +142,14 @@ server {
 server {
   listen 443 ssl;
   server_name example.com;
+  root /usr/share/nginx/html;
+  index index.html;
 
-  ssl_certificate /etc/ssl/certs/example.crt;
-  ssl_certificate_key /etc/ssl/private/example.key;
+  ssl_certificate /etc/nginx/certs/example.crt;
+  ssl_certificate_key /etc/nginx/certs/example.key;
 
   location / {
-    proxy_pass http://localhost:8080;
-    # ...
+    try_files $uri $uri/ =404;
   }
 }
 ```
@@ -144,15 +160,33 @@ server {
 upstream backend {
   server 127.0.0.1:8080;
   server 127.0.0.1:8081;
-  server 127.0.0.1:8082;
 }
 
 server {
+  listen 80;
   # ...
 
   location / {
     proxy_pass http://backend;
     # ...
+  }
+}
+
+server {
+  listen 8080;
+
+  location / {
+    default_type text/plain;
+    return 200 "Backend 8080";
+  }
+}
+
+server {
+  listen 8081;
+
+  location / {
+    default_type text/plain;
+    return 200 "Backend 8081";
   }
 }
 ```
@@ -172,7 +206,7 @@ server {
 
   location ~ \.php$ {
     include /etc/nginx/fastcgi.conf;
-    fastcgi_pass 127.0.0.1:9000;
+    fastcgi_pass unix:///run/php-fpm/www.sock;
     fastcgi_index index.php;
 
     # fastcgi_read_timeout 600s;
