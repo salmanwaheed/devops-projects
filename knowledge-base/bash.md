@@ -82,7 +82,8 @@ fi
 
 ```bash
 # For loop with array
-for i in 1 2 3 4 5; do
+arr=(11 22 33 44 55)
+for i in ${arr[@]}; do
   echo $i
 done
 
@@ -183,7 +184,8 @@ done
 arr=(10 "salman" true "waheed")
 
 echo ${#arr{@}}           # length
-echo ${arr[@]}            # all elements
+echo ${arr[@]}            # all values
+echo ${!arr[@]}           # all indexes
 echo ${arr[0]}            # first element
 
 arr+=("--HELLO--")        # append/insert
