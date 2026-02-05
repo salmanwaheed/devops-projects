@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-# Fedora 42 KVM image:
-# https://download.fedoraproject.org/pub/fedora/linux/releases/42/Cloud/x86_64/images/Fedora-Cloud-Base-Generic-42-1.1.x86_64.qcow2
+# Fedora 43 KVM image:
+# https://download.fedoraproject.org/pub/fedora/linux/releases/43/Cloud/x86_64/images/Fedora-Cloud-Base-Generic-43-1.6.x86_64.qcow2
 
 export LIBVIRT_DEFAULT_URI="qemu:///system"
 
@@ -14,7 +14,7 @@ VM_USER="fedora"
 VM_POOL="/var/lib/libvirt/images"
 VM_DISK="${VM_POOL}/${VM_NAME}.qcow2"
 VM_SEED_ISO="${VM_POOL}/${VM_NAME}-seed.iso"
-VM_QCOW_SRC=$(ls -1t ~/Downloads/bootable-images/kvm/Fedora*42*.qcow2 | head -1)
+VM_QCOW_SRC=$(ls -1t ~/Downloads/bootable-images/kvm/Fedora*43*.qcow2 | head -1)
 VM_PUB_KEY=$(cat ~/.ssh/dev.pub)
 VM_SEED_DATA="${VM_SCRIPT_PATH}/cloud-init.${VM_NAME}"
 VM_OS_VARIANT="fedora41" # virt-install --osinfo list | grep -E "fedora|amazon"

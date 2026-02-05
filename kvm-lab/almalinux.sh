@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-# AlmaLinux 9 KVM image:
-# https://repo.almalinux.org/almalinux/9/cloud/x86_64/images/AlmaLinux-9-GenericCloud-9.6-20250522.x86_64.qcow2
+# AlmaLinux 10 KVM image:
+# https://repo.almalinux.org/almalinux/10/cloud/x86_64/images/AlmaLinux-10-GenericCloud-10.1-20251125.0.x86_64.qcow2
 
 export LIBVIRT_DEFAULT_URI="qemu:///system"
 
@@ -14,10 +14,10 @@ VM_USER="almalinux"
 VM_POOL="/var/lib/libvirt/images"
 VM_DISK="${VM_POOL}/${VM_NAME}.qcow2"
 VM_SEED_ISO="${VM_POOL}/${VM_NAME}-seed.iso"
-VM_QCOW_SRC=$(ls -1t ~/Downloads/bootable-images/kvm/AlmaLinux-9*.qcow2 | head -1)
+VM_QCOW_SRC=$(ls -1t ~/Downloads/bootable-images/kvm/AlmaLinux-10*.qcow2 | head -1)
 VM_PUB_KEY=$(cat ~/.ssh/dev.pub)
 VM_SEED_DATA="${VM_SCRIPT_PATH}/cloud-init.${VM_NAME}"
-VM_OS_VARIANT="almalinux9" # virt-install --osinfo list | grep alma*9
+VM_OS_VARIANT="almalinux10" # virt-install --osinfo list | grep alma*10
 
 # Install deps
 # sudo dnf install -y @virtualization cloud-utils
