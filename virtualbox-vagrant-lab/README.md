@@ -1,7 +1,8 @@
-# Vagrant VM Setup Guide (AlmaLinux / CentOS / Ubuntu)
+# Vagrant VM Setup Guide (AlmaLinux / CentOS / Ubuntu / Fedora)
 
 This repository contains preconfigured **Vagrant environments** for different Linux distributions:
 
+- Fedora 43
 - AlmaLinux 9
 - CentOS 7/8
 - Ubuntu 22.04
@@ -18,10 +19,12 @@ Each environment includes:
 ## Directory Structure
 
 ```sh
-vagrant-with-virtualbox/
+virtualbox-vagrant-lab/
 ├── almalinux/
 │   └── Vagrantfile
 ├── centos/
+│   └── Vagrantfile
+├── fedora/
 │   └── Vagrantfile
 ├── ubuntu/
 │   └── Vagrantfile
@@ -71,11 +74,13 @@ vagrant ssh
 
 | Distro     | IP Address        | SSH Port |
 |------------|-------------------|----------|
+| Fedora     | `192.168.56.19`   | `5204`   |
 | AlmaLinux  | `192.168.56.18`   | `5203`   |
 | CentOS     | `192.168.56.17`   | `5202`   |
 | Ubuntu     | `192.168.56.16`   | `5201`   |
 
 ```sh
+ssh vagrant@192.168.56.19 -p 5204 -i ~/.ssh/dev # Fedora
 ssh vagrant@192.168.56.18 -p 5203 -i ~/.ssh/dev # AlmaLinux
 ssh vagrant@192.168.56.17 -p 5202 -i ~/.ssh/dev # CentOS
 ssh vagrant@192.168.56.16 -p 5201 -i ~/.ssh/dev # Ubuntu
@@ -90,7 +95,7 @@ ssh vagrant@192.168.56.16 -p 5201 -i ~/.ssh/dev # Ubuntu
 | Feature            | Default Value              | Customizable in `Vagrantfile`          |
 |--------------------|----------------------------|----------------------------------------|
 | IP Address         | See table above            | Use any from `192.168.56.0/24`         |
-| SSH Port Forward   | `5201-5203`                | Avoid port conflicts on your machine   |
+| SSH Port Forward   | `5201-5204`                | Avoid port conflicts on your machine   |
 | CPUs / Memory      | `2 CPUs`, `2048 MB RAM`    | Adjust `vb.cpus` and `vb.memory`       |
 | SSH Public Key     | `~/.ssh/dev.pub`           | Change file path in the provisioner    |
 

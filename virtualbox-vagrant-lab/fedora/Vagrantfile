@@ -1,0 +1,35 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "fedora/43"
+  config.vm.box_version = "43.1.6"
+  config.vm.box_url = "https://download.fedoraproject.org/pub/fedora/linux/releases/43/Cloud/x86_64/images/Fedora-Cloud-Base-Vagrant-VirtualBox-43-1.6.x86_64.vagrant.virtualbox.box"
+  config.vm.hostname = "fedora-43"
+  config.vm.box_check_update = false
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.network "private_network", ip: "192.168.56.19"
+  config.vm.network :forwarded_port, guest: 22, host: 2504, id: "ssh"
+
+  config.ssh.insert_key = false
+
+  config.vm.provision "shell" do |s|
+    ssh_pub_key_path = File.expand_path("~/.ssh/dev.pub")
+    ssh_pub_key = File.read(ssh_pub_key_path).strip
+
+    s.inline = <<-SHELL
+      echo "#{ssh_pub_key}" >> /home/vagrant/.ssh/authorized_keys
+      echo "#{ssh_pub_key}" >> /root/.ssh/authorized_keys
+
+      # sudo sed -i "s|mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/almalinux-*
+      # sudo sed -i "s|# baseurl=|baseurl=|g" /etc/yum.repos.d/almalinux-*
+      # # sudo sed -i "s|# baseurl=https://repo.almalinux.org|baseurl=https://vault.almalinux.org|g" /etc/yum.repos.d/almalinux-*
+
+      sudo yum install -y vim ca-certificates wget bzip2 zip unzip bind-utils netcat
+    SHELL
+  end
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    vb.cpus = 2
+    vb.memory = 2048
+    vb.check_guest_additions = false
+  end
+end
