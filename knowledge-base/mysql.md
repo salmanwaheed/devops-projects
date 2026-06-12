@@ -1,6 +1,7 @@
-# MySQL / MariaDB Reference Guide
+# SQL 80/20 Quick Guide
 
-## Overview
+This covers about 80% of what we need for daily.
+
 **Structured Query Language (SQL)** is used to interact with **Relational Database Management Systems (RDBMS)**. Common RDBMS include MySQL, PostgreSQL, MariaDB, and SQL Server.
 
 ---
@@ -237,6 +238,9 @@ REVOKE ALL ON *.* FROM 'user'@'host';
 
 -- Change password
 ALTER USER 'user'@'host' IDENTIFIED BY 'newpass';
+
+--
+ALTER TABLE table_name MODIFY COLUMN column_name datatype constraints;
 ```
 
 ---

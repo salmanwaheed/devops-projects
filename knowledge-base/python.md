@@ -157,7 +157,12 @@ print(result.returncode) # 0 if success, >0 if error
 # needs PyYAML installed
 import yaml, json
 
-data = {"name": "Salman"}
+data = {
+  "users": [
+    {"name": "Salman", "role": "admin"},
+    {"name": "Sara", "role": "user"},
+  ]
+}
 
 # YAML
 yaml_str = yaml.dump(data)                      # Convert dict → YAML string
@@ -184,13 +189,6 @@ print(json.load(open("data.json", "r")))        # Read JSON file → dict
 #
 # Example: → aws ec2 describe-instances --query "Reservations[].Instances[?State.Name=='running'].InstanceId"
 
-data = {
-  "users": [
-    {"name": "Salman", "role": "admin"},
-    {"name": "Sara", "role": "user"},
-  ]
-}
-
 # https://jmespath.org
 jmespath.search("users[?role=='admin'].name", data)
 # Output: ["Salman"]
@@ -203,11 +201,16 @@ jmespath.search("users[?role=='admin'].name", data)
 # pip install requests
 import requests
 
-api_key = "YOUR_API_KEY"
-headers = {"x-api-key": api_key} # {"Authorization": f"Bearer {api_key}"}
+headers = {"x-api-key": "<YOUR_API_KEY>"} # {"Authorization": "Bearer <YOUR_API_KEY>"}
+url = "https://api.example.com/data"
+payload = {'k1':'v1','k2':'v2'}
 
-r = requests.get("https://api.example.com/data", headers=headers)
+r = requests.post(url, headers=headers, [json|data]=payload)
+print(r)
+
+r = requests.get(url, headers=headers, timeout=10)
 print(r.status_code, r.json())
+
 ```
 
 ### logging

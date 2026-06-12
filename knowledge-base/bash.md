@@ -83,8 +83,14 @@ fi
 ```bash
 # For loop with array
 arr=(11 22 33 44 55)
-for i in ${arr[@]}; do
-  echo $i
+for i in ${!arr[@]}; do
+  echo index=$i value=${arr[i]}
+done
+
+# For loop with dict
+declare -A dict=([k1]=11 [k2]=22 [k3]=33 [k4]=44 [k5]=55)
+for k in ${!dict[@]}; do
+  echo key=$k value=${dict[$k]}
 done
 
 # For loop with brace expansion

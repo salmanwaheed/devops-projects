@@ -80,8 +80,13 @@ server {
   }
 
   location /api {
-    add_header Content-Type 'application/json';
+    default_type application/json;
     return 403 '{"error": "Access forbidden"}';
+  }
+
+  location = /poweredby.png {
+    alias /usr/share/nginx/html/poweredby.png;
+    default_type image/png;
   }
 
   location = /ads.txt {
@@ -97,29 +102,9 @@ server {
 server {
   listen 80;
   server_name static.example.com;
-  root /var/www/static;
+  root /var/www/html/static;
   autoindex on;  # show directory listing
   gzip on;       # enable compression
-}
-```
-
-## Reverse Proxy (Backend App)
-
-```nginx
-server {
-  listen 80;
-  server_name api.example.com;
-
-  location / {
-    proxy_pass http://localhost:5000;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Proxy $proxy_host; # custom header
-    # proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    # proxy_set_header X-Forwarded-Proto $scheme;
-    # proxy_set_header X-Forwarded-Host $host;
-    # proxy_set_header X-Forwarded-Port $server_port;
-  }
 }
 ```
 
@@ -128,11 +113,6 @@ server {
 Make your localhost secure `../localhost-http-to-https`.
 
 ```nginx
-# IF ERROR = bind() to 0.0.0.0:80 failed or any port
-# sudo systemctl stop nginx
-# sudo nginx -s stop
-# pkill nginx
-
 server {
   listen 80;
   server_name example.com;
@@ -155,6 +135,30 @@ server {
 ```
 
 ## Load Balancing (Round Robin)
+
+> ERROR = `nginx: [emerg] bind() to 0.0.0.0:<PORT> failed (13: Permission denied)`
+
+```sh
+sudo systemctl stop nginx
+pkill nginx
+
+# test quickly, reboot = SELinux mode resets (policy unchanged)
+sudo setenforce Permissive
+
+# set permanent, reboot = policy change stays
+sudo semanage port -a -t http_port_t -p tcp <PORT>
+
+# unset/remove port
+sudo semanage port -d -t http_port_t -p tcp <PORT>
+
+# check which ports are open
+sudo semanage port -l | grep <PORT>
+
+sudo systemctl restart nginx
+curl -i localhost
+# ....
+# Backend <PORT>
+```
 
 ```nginx
 upstream backend {
@@ -187,6 +191,58 @@ server {
   location / {
     default_type text/plain;
     return 200 "Backend 8081";
+  }
+}
+```
+
+## Reverse Proxy (Backend App)
+
+```sh
+curl -i localhost
+# HTTP/1.1 200 OK
+# ...
+# X-Debug-Host: my-host
+# X-Debug-Proxy: my-proxy
+# X-Debug-IP: my-real-ip
+# X-Debug-Proto: http
+# X-Debug-Host: localhost
+# X-Debug-Port: 80
+
+# backend is running on port 5000
+```
+
+```nginx
+server {
+  listen 80;
+  server_name api.example.com;
+
+  location / {
+    proxy_pass http://localhost:5000;
+
+    proxy_set_header Host my-host; # $host;
+    proxy_set_header X-Proxy my-proxy ; # $proxy_host;
+    proxy_set_header X-Real-IP my-real-ip; # $remote_addr;
+    # proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Host $server_name;
+    proxy_set_header X-Forwarded-Port $server_port;
+  }
+}
+
+server {
+  listen 5000;
+  server_name localhost;
+
+  location / {
+    add_header X-Debug-Host $host always;
+    add_header X-Debug-Proxy $http_x_proxy always;
+    add_header X-Debug-IP $http_x_real_ip always;
+    add_header X-Debug-Proto $http_x_forwarded_proto always;
+    add_header X-Debug-Host $http_x_forwarded_host always;
+    add_header X-Debug-Port $http_x_forwarded_port always;
+
+    default_type text/plain;
+    return 200 "backend is running on port 5000";
   }
 }
 ```
