@@ -32,8 +32,12 @@ fi
 echo "[INFO] Creating $MOK_PATH"
 sudo mkdir -p $MOK_PATH
 
-echo "[INFO] Generating MOK key pair..."
-sudo openssl req -nodes -new -x509 -newkey rsa:2048 -outform DER -addext "extendedKeyUsage=codeSigning" -keyout $MOK_PATH/MOK.priv -out $MOK_PATH/MOK.der -subj "/CN=VirtualBox/" >/dev/null 2>&1
+if [ ! -f $MOK_PATH/MOK.der ]; then
+  echo "[INFO] Generating MOK key pair..."
+  sudo openssl req -nodes -new -x509 -newkey rsa:2048 -outform DER -addext "extendedKeyUsage=codeSigning" -keyout $MOK_PATH/MOK.priv -out $MOK_PATH/MOK.der -subj "/CN=VirtualBox/" >/dev/null 2>&1
+else
+  echo "[INFO] MOK key already exists, skipping generation."
+fi
 
 echo
 echo "==== This is NOT your system password - it will be used after reboot in the blue MOK screen."
