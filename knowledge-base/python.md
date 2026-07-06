@@ -76,49 +76,134 @@ def greet(name):
 greet(name="Salman") # prints "Hi, Salman!"
 ```
 
-## Modules and Packages
-
-### File
+## Strings
 
 ```py
-# Append / create
-with open("file.txt", "a+") as f:
+s="HellO World, HellO World, world world"
+
+print(len(s)) # length
+print(s[1:3]) # substring
+
+print(s.replace("HellO", "hi")) # replace all matches
+
+print(s.lower()) # lowercase
+print(s.upper()) # uppercase
+print(s.title()) # titlecase
+```
+
+## List - unordered - mutable
+
+```py
+l = [10, "salman", True, "waheed"]
+
+print(len(l))   # length
+print(l)        # all elements
+print(l[0])     # first element
+
+l.append("--HELLO--")   # append/insert
+l[1] = "--SALMAN--"     # update
+l.pop(2)                # remove/unset # OR: del l[2]
+```
+
+## Dict
+
+```py
+d = {"k1": 10, "k2": "salman", "k3": True, "k4": "waheed"}
+
+print(len(d))                   # length
+print(d)                        # all key/value pairs
+print(d.get("k2", "default"))   # get value from key # OR: d["k2"]
+
+print(d.keys())    # all keys
+print(d.values())  # all values
+
+d.update({"k2": "--SALMAN---"})     # add/update key/value # OR: d["k2"] = "--SALMAN--"
+d.pop("k3")                         # remove/unset # OR: del d["k3"]
+```
+
+## Tuple - ordered - immutable
+
+```py
+t = (10, "salman", True, "waheed")
+
+print(len(t))   # length
+print(t)        # all elements
+print(t[0])     # first element
+```
+
+## Set
+
+```py
+s1 = {1, 2, 3}
+
+print(len(s1))  # length
+print(s1)       # all elements
+
+s1.add(10)      # append/insert
+s1.discard(2)   # remove/unset
+
+s2 = {3, 4, 5}
+
+print(s1 | s2) # union
+print(s1 & s2) # intersection
+print(s1 ^ s2) # symmetric difference
+```
+
+## Comprehensions (short & powerful)
+
+```py
+l = [x*2 for x in range(5)]     # list
+s = {x for x in range(5)}       # set
+d = {x:x*2 for x in range(5)}   # dict
+```
+
+## Error Handling
+
+```py
+try:
+  name = "Salman"
+  print(nam)
+except Exception as e:
+  print("[ERROR]:", e)
+finally:
+  print("Always run...")
+```
+
+## pathlib
+
+```py
+# https://docs.python.org/3/library/pathlib.html
+from pathlib import Path
+
+file = Path("file.txt")
+
+print(file.name)
+print(file.parent)
+print(file.exists())
+print(file.is_file())
+print(Path(".").is_dir())
+
+print(file.resolve())
+print(Path("~/").expanduser())
+
+print(list(Path(".").glob("*.txt")))
+
+Path("./new_dir").mkdir(parents=True, exist_ok=True)
+
+file.write_text("Hello World\n")    # Write whole file (overwrites)
+print( file.read_text() )           # Read whole file
+
+# Append
+with file.open("a") as f:
   f.write("hello world\n")
 
-# Read entire file
-with open("file.txt", "r") as f:
-  data = f.read()
-print(data)
-
 # Read line by line
-with open("file.txt", "r") as f:
-  lines = [line.strip() for line in f.readlines()]
-print(lines)
+with file.open("r", encoding="utf-8") as f:
+  for line in f:
+    print(line.strip())
 ```
 
-### os
-
-```py
-# https://docs.python.org/3/library/os.html
-import os
-
-os.chdir("/tmp")                      # Change working directory
-os.getcwd()                           # Current directory
-os.listdir(".")                       # List files in current directory
-os.mkdir("new_folder")                # Make new folder
-os.rename("file.txt", "f.txt")        # Rename file
-os.remove("f.txt")                    # Delete file
-
-os.path.join("folder", "file.txt")    # Join paths safely
-os.path.exists("file.txt")            # Check if file/folder exists
-os.path.isdir("folder")               # Is it a directory?
-os.path.isfile("file.txt")            # Is it a file?
-os.path.basename("/path/to/file.txt") # Returns file.txt
-os.path.dirname("/path/to/file.txt")  # Returns /path/to
-os.environ.get("HOME")                # Get environment variable
-```
-
-### sys
+## sys
 
 ```py
 # https://docs.python.org/3/library/sys.html
@@ -132,7 +217,7 @@ sys.exit(1)     # Exit with error code 1
 # Example: python script.py arg1 arg2
 ```
 
-### subprocess
+## subprocess
 
 ```py
 # https://docs.python.org/3/library/subprocess.html
@@ -150,7 +235,7 @@ result = subprocess.run(["ls", "non-existent"], capture_output=True, text=True)
 print(result.returncode) # 0 if success, >0 if error
 ```
 
-### YAML / JSON / jmespath
+## YAML / JSON / jmespath
 
 ```py
 # https://pyyaml.org/wiki/PyYAMLDocumentation
@@ -194,7 +279,7 @@ jmespath.search("users[?role=='admin'].name", data)
 # Output: ["Salman"]
 ```
 
-### requests
+## requests
 
 ```py
 # https://requests.readthedocs.io/en/latest
@@ -213,7 +298,7 @@ print(r.status_code, r.json())
 
 ```
 
-### logging
+## logging
 
 ```py
 # https://docs.python.org/3/library/logging.html
@@ -232,7 +317,7 @@ logging.warning("This is a warning")
 logging.error("This is an error")
 ```
 
-### datetime
+## datetime
 
 ```py
 # https://docs.python.org/3/library/datetime.html
@@ -240,100 +325,4 @@ from datetime import datetime, timezone
 
 now         = datetime.now(timezone.utc)
 today_at_11 = datetime(2026, 1, 5, 11, 0, 0, 0, timezone.utc)
-```
-
-## Error Handling
-
-```py
-try:
-  name = "Salman"
-  print(nam)
-except Exception as e:
-  print("[ERROR]:", e)
-finally:
-  print("Always run...")
-```
-
-## Data Structure
-
-### Strings
-
-```py
-s="HellO World, HellO World, world world"
-
-print(len(s)) # length
-print(s[1:3]) # substring
-
-print(s.replace("HellO", "hi")) # replace all matches
-
-print(s.lower()) # lowercase
-print(s.upper()) # uppercase
-print(s.title()) # titlecase
-```
-
-### List - unordered - mutable
-
-```py
-l = [10, "salman", True, "waheed"]
-
-print(len(l))   # length
-print(l)        # all elements
-print(l[0])     # first element
-
-l.append("--HELLO--")   # append/insert
-l[1] = "--SALMAN--"     # update
-l.pop(2)                # remove/unset # OR: del l[2]
-```
-
-### Dict
-
-```py
-d = {"k1": 10, "k2": "salman", "k3": True, "k4": "waheed"}
-
-print(len(d))                   # length
-print(d)                        # all key/value pairs
-print(d.get("k2", "default"))   # get value from key # OR: d["k2"]
-
-print(d.keys())    # all keys
-print(d.values())  # all values
-
-d.update({"k2": "--SALMAN---"})     # add/update key/value # OR: d["k2"] = "--SALMAN--"
-d.pop("k3")                         # remove/unset # OR: del d["k3"]
-```
-
-
-### Tuple - ordered - immutable
-
-```py
-t = (10, "salman", True, "waheed")
-
-print(len(t))   # length
-print(t)        # all elements
-print(t[0])     # first element
-```
-
-### Set
-
-```py
-s1 = {1, 2, 3}
-
-print(len(s1))  # length
-print(s1)       # all elements
-
-s1.add(10)      # append/insert
-s1.discard(2)   # remove/unset
-
-s2 = {3, 4, 5}
-
-print(s1 | s2) # union
-print(s1 & s2) # intersection
-print(s1 ^ s2) # symmetric difference
-```
-
-### Comprehensions (short & powerful)
-
-```py
-l = [x*2 for x in range(5)]     # list
-s = {x for x in range(5)}       # set
-d = {x:x*2 for x in range(5)}   # dict
 ```

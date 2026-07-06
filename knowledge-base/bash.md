@@ -99,8 +99,9 @@ for i in {1..5}; do
 done
 
 # For loop with regex
-for file in $(ls -1 *.txt | grep -v file.txt); do
-  echo $file
+for file in *.txt; do
+  [[ "$file" == "file.txt" ]] && continue
+  echo "$file"
 done
 
 # For loop with increment (c++), decrement (c--)
@@ -147,6 +148,11 @@ name=""
 # Create / Delete
 touch file.txt
 rm file.txt
+
+basename /path/to/file.txt # file.txt
+dirname /path/to/file.txt # /path/to
+file=script.sh; echo "${file%.*}" # script
+file=script.sh; echo "${file##*.}" # .sh
 ```
 
 ## Command Substitution
@@ -189,7 +195,7 @@ done
 ```bash
 arr=(10 "salman" true "waheed")
 
-echo ${#arr{@}}           # length
+echo ${#arr[@]}           # length
 echo ${arr[@]}            # all values
 echo ${!arr[@]}           # all indexes
 echo ${arr[0]}            # first element
@@ -204,9 +210,9 @@ unset arr[0]              # remove / unset
 Must use bash v4.0 or above version or use zsh.
 
 ```bash
-declare -A d=( [k1]=10 [k2]="salman" [k3]=true [k4]="waheed" )
+declare -A dict=( [k1]=10 [k2]="salman" [k3]=true [k4]="waheed" )
 
-echo ${#dict{@}}           # length
+echo ${#dict[@]}           # length
 echo ${dict[@]}            # all values
 echo ${!dict[@]}           # all keys
 echo ${dict["k2"]}         # get
